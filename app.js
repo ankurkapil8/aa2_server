@@ -10,7 +10,6 @@ require("./config");
 // const categoryRoutes = require("./controllers/category");
 // const productRoutes = require("./controllers/product");
 // const orderRoutes = require("./controllers/orders");
-// const paymentRoutes = require("./controllers/payment")
  const memberGroupRoutes = require("./controllers/memberGroup")
 
 // var PORT = process.env.PORT || 3000;
