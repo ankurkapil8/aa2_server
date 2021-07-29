@@ -1,0 +1,27 @@
+{
+  "name": "kanba-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^5.10.11",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.4.14",
+    "q": "^1.5.1",
+    "razorpay": "^2.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./bin/www",
+    "prod": "NODE_ENV=production node bin/www.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
