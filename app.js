@@ -8,7 +8,6 @@ require("./config");
 // const financeRoutes = require("./controllers/finance");
  const usersRoutes = require("./controllers/users");
 // const categoryRoutes = require("./controllers/category");
-// const productRoutes = require("./controllers/product");
 // const orderRoutes = require("./controllers/orders");
  const memberGroupRoutes = require("./controllers/memberGroup")
 
