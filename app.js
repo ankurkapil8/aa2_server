@@ -10,6 +10,7 @@ require("./config");
 // const categoryRoutes =require("./controllers/category");
 // const orderRoutes = require("./controllers/orders");
  const memberGroupRoutes = require("./controllers/memberGroup")
+ const processingFeeRoutes = require("./controllers/processingFee")
 
 // var PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
@@ -39,6 +40,8 @@ app.use("/api/user",usersRoutes);
 //app.use("/api/orders",orderRoutes);
 //app.use("/api/payment",paymentRoutes);
 app.use("/api/memberGroups",memberGroupRoutes);
+app.use("/api/processingFee",processingFeeRoutes);
+
   // app.use("/", (req, res, next) => {
 //   // sendObj.sendMail().then(res=>{
 //   //   console.log(res);
