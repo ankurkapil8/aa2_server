@@ -21,7 +21,6 @@ app.post("/entry", async(req, res, next) => {
           message: validationResult.error.details
         });        
       }
-      //const groupCode = `${req.body.group_name}_${new Date().getTime()}`;
       const created_at = new Date().getTime();
       var formatedData = {
         created_at:created_at,
