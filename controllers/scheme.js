@@ -70,7 +70,7 @@ app.post("/entry", async(req, res, next) => {
               message: validationResult.error.details
             });        
           }
-        let response = await ExpenseModel.deleteScheme(req.params.id);
+        let response = await SchemeModel.deleteScheme(req.params.id);
         return res.status(200).json({
             message: response
           });

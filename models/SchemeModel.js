@@ -32,4 +32,4 @@ function save(data) {
 
   }
 
-module.exports = {save:save,getAll:getAll}
+module.exports = { save:save,getAll:getAll,deleteScheme:deleteScheme }
