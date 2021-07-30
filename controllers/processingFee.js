@@ -5,7 +5,7 @@ const Joi = require('@hapi/joi');
 var ProcessingFeeModel = require('../models/ProcessingFeeModel');
 const { async } = require("q");
 
-app.post("/fee", async(req, res, next) => {
+app.post("/entry", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
         amount: Joi.required(),
@@ -47,7 +47,7 @@ app.post("/fee", async(req, res, next) => {
   
   });
 
-  app.get("/fee", async(req, res, next) => {
+  app.get("/entry", async(req, res, next) => {
     try{
         let response = await ProcessingFeeModel.getAll();
         return res.status(200).json({

@@ -5,7 +5,7 @@ const Joi = require('@hapi/joi');
 var MemberGroupModel = require('../models/MemberGroups');
 const { async } = require("q");
 
-app.post("/memberGroup", async(req, res, next) => {
+app.post("/entry", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
         group_name: Joi.required(),
@@ -46,7 +46,7 @@ app.post("/memberGroup", async(req, res, next) => {
   
   });
 
-  app.get("/memberGroup", async(req, res, next) => {
+  app.get("/entry", async(req, res, next) => {
     try{
         let response = await MemberGroupModel.getAll();
         return res.status(200).json({
@@ -60,7 +60,7 @@ app.post("/memberGroup", async(req, res, next) => {
     }
   })
 
-  app.delete("/memberGroup/:group_code", async(req, res, next) => {
+  app.delete("/entry/:group_code", async(req, res, next) => {
     try{
         const joiSchema = Joi.object({
             group_code: Joi.required(),
