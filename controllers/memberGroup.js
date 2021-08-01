@@ -17,10 +17,8 @@ app.post("/entry", async(req, res, next) => {
         });        
       }
       const groupCode = `${req.body.group_name}_${new Date().getTime()}`;
-      const created_at = new Date().getTime();
       var formatedData = {
         group_code:groupCode,
-        created_at:created_at,
         status:0,
         ...req.body
       }
