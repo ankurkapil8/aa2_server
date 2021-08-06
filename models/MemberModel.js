@@ -33,7 +33,8 @@ function save(data) {
 function deleteMember(member_id){
   return new Promise(function (resolve, reject) {
       var query=connection.query(`DELETE from ${TableName} WHERE member_id = ?`,[member_id], (err, result) => {
-      if (err) reject(err);
+      console.log(query.sql);
+        if (err) reject(err);
     resolve(`Member ID ${member_id} has been deleted!`);
     })
   })
