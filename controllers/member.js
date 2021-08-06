@@ -56,5 +56,28 @@ app.get("/entry", async(req, res, next) => {
     }
   
   });
+  app.delete("/entry/:member_id", async(req, res, next) => {
+    try{
+        const joiSchema = Joi.object({
+          member_id: Joi.required(),
+          }).unknown(true);  
+          const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+          if(validationResult.error){
+            return res.status(500).json({
+              message: validationResult.error.details
+            });        
+          }
+    
+        let response = await MemberModel.deleteMember(req.params.member_id);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
 
   module.exports = app;
