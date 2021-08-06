@@ -2,15 +2,15 @@ const { async } = require("q");
 const connection = require("../config");
 const TableName = "member_details";
 
-// function save(data) {
-//     return new Promise(function (resolve, reject) {
-//         connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
-//         if (err) reject(err);
+function save(data) {
+    return new Promise(function (resolve, reject) {
+        connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
+        if (err) reject(err);
   
-//         resolve("data saved successfully!");
-//       })
-//     })
-//   }
+        resolve("data saved successfully!");
+      })
+    })
+  }
   function getAll(){
     return new Promise(function (resolve, reject) {
         connection.query(`SELECT * from ${TableName}`, (err, result) => {
@@ -30,6 +30,6 @@ const TableName = "member_details";
 //     })
 
 //   }
-module.exports = {getAll:getAll};
+module.exports = {getAll:getAll,save:save};
 
 
