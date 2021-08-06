@@ -24,7 +24,6 @@ app.get("/entry", async(req, res, next) => {
       const joiSchema = Joi.object({
         enrollment_date: Joi.required(),
         member_name:Joi.required(),
-        member_id:Joi.required(),
       }).unknown(true);  
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
