@@ -119,6 +119,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
   });
   app.get("/entry/:filter", async(req, res, next) => {
     try{
+      console.log(typeof parseInt(req.params.filter));
       let filter = "";
         switch (req.params.filter) {
           case "pendingApproval":
@@ -127,8 +128,11 @@ app.post("/applyGroupLoan", async(req, res, next) => {
             case "pendingDisburse":
               filter = "is_approved=1 AND is_disbursed=0";
               break;
-          default:
-            filter = "1=1"
+              case "all":
+                filter = "1=1"
+                break;
+            default:
+              filter = `id=${req.params.filter}`;
             break;
         }
         let response = await GroupLoanModel.getAll(filter);
