@@ -117,5 +117,30 @@ app.post("/applyGroupLoan", async(req, res, next) => {
     }
       
   });
+  app.get("/entry/:filter", async(req, res, next) => {
+    try{
+      let filter = "";
+        switch (req.params.filter) {
+          case "pendingApproval":
+            filter = "is_approved=0";
+            break;
+            case "pendingDisburse":
+              filter = "is_approved=1 AND is_disbursed=0";
+              break;
+          default:
+            filter = "1=1"
+            break;
+        }
+        let response = await GroupLoanModel.getAll(filter);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
 
   module.exports = app;

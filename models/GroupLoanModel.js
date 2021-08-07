@@ -11,9 +11,9 @@ function save(data) {
       })
     })
   }
-  function getAll(){
+  function getAll(filter){
     return new Promise(function (resolve, reject) {
-        connection.query(`SELECT * from ${TableName}`, (err, result) => {
+        connection.query(`SELECT * from ${TableName} WHERE ${filter}`, (err, result) => {
         if (err) reject(err);
       resolve(result);
       })
