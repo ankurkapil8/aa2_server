@@ -15,7 +15,7 @@ require("./config");
  const schemeRoutes = require("./controllers/scheme")
  const memberRoutes = require("./controllers/member")
  const groupLoanRoutes = require("./controllers/groupLoan")
-
+ const EMIRoutes = require("./controllers/EMIs")
 // var PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
 //     console.log(`Server running on port ${PORT}`);
@@ -49,7 +49,7 @@ app.use("/api/expense",expenseRoutes);
 app.use("/api/scheme",schemeRoutes);
 app.use("/api/member",memberRoutes);
 app.use("/api/groupLoan",groupLoanRoutes);
-
+app.use("/api/emis",EMIRoutes);
 
   // app.use("/", (req, res, next) => {
 //   // sendObj.sendMail().then(res=>{
