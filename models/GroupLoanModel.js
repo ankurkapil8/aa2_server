@@ -22,22 +22,22 @@ function save(data) {
 
   }
 
-  function approveLoan(id){
+  function approveLoan(id, actionType){
     return new Promise(function (resolve, reject) {
-        let qry=connection.query(`UPDATE ${TableName} SET is_approved=? WHERE id=?`,[1, id], (err, result) => {
+        let qry=connection.query(`UPDATE ${TableName} SET is_approved=? WHERE id=?`,[actionType, id], (err, result) => {
        console.log(qry.sql);
         if (err) reject(err);
-      resolve("Loan has been approved. Loan will show for disburse!");
+      resolve(actionType==1?"Loan has been approved. Loan will show for disburse!":"Loan has been rejected!");
       })
     })
   }
 
-  function disburseLoan(id){
+  function disburseLoan(id, actionType){
     return new Promise(function (resolve, reject) {
-        let qry=connection.query(`UPDATE ${TableName} SET is_disbursed=? WHERE id=?`,[1, id], (err, result) => {
+        let qry=connection.query(`UPDATE ${TableName} SET is_disbursed=? WHERE id=?`,[actionType, id], (err, result) => {
        console.log(qry.sql);
         if (err) reject(err);
-      resolve("Loan has been disbursed!");
+      resolve(actionType==1?"Loan has been disbursed!":"Loan has been rejected!");
       })
     })
   }

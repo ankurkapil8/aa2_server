@@ -56,6 +56,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
         id: Joi.required(),
+        actionType:Joi.required()
       }).unknown(true);  
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
@@ -64,31 +65,27 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         });        
       }
       try{
-        let response = await GroupLoanModel.approveLoan(req.body.id);
+        let response = await GroupLoanModel.approveLoan(req.body.id, req.body.actionType);
         return res.status(200).json({
             message: response
           });
-
       }catch (error) {
       return res.status(500).json({
         message: error.message
       });
-  
     }
-
     } catch (error) {
       return res.status(500).json({
         message: error.message
       });
-  
     }
-      
   });
   // disburse loan
   app.post("/disburseLoan", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
         id: Joi.required(),
+        actionType:Joi.required()
       }).unknown(true);  
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
@@ -97,25 +94,20 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         });        
       }
       try{
-        let response = await GroupLoanModel.disburseLoan(req.body.id);
+        let response = await GroupLoanModel.disburseLoan(req.body.id, req.body.actionType);
         return res.status(200).json({
             message: response
           });
-
       }catch (error) {
       return res.status(500).json({
         message: error.message
       });
-  
-    }
-
+      }
     } catch (error) {
       return res.status(500).json({
         message: error.message
       });
-  
     }
-      
   });
   app.get("/entry/:filter", async(req, res, next) => {
     try{
