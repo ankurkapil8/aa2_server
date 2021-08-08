@@ -13,7 +13,7 @@ function save(data) {
   }
   function getAll(){
     return new Promise(function (resolve, reject) {
-        connection.query(`SELECT * from ${TableName} ORDER BY created_by DESC`, (err, result) => {
+        connection.query(`SELECT * from ${TableName} ORDER BY created_at DESC`, (err, result) => {
         if (err) reject(err);
       resolve(result);
       })
