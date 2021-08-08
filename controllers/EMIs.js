@@ -33,18 +33,28 @@ app.post("/calculateEMI", async(req, res, next) => {
 
 })
 function calculateEMIFlat(totalLoan,loan_amount,tenure,interest_rate,EMI_payout,loanDate, result=[]){
-    if(loan_amount == 0){
-        return result;
-    }
-    let principal = totalLoan/tenure;
-    let int_Amount =  (totalLoan*interest_rate)/100;
-    let nextEMIDate  = "";
-    if(EMI_payout=="monthly"){
-        nextEMIDate = new Date(loanDate.setMonth(loanDate.getMonth()+1))
-    }else if(EMI_payout=="weekly"){
-        nextEMIDate = new Date(loanDate.setDate(loanDate.getDate() + 1 * 7));
-    }else{
-        nextEMIDate = new Date(loanDate.setDate(loanDate.getDate()+1))
+  let nextEMIDate  = "";
+  if(EMI_payout=="monthly"){
+      nextEMIDate = new Date(loanDate.setMonth(loanDate.getMonth()+1))
+  }else if(EMI_payout=="weekly"){
+      nextEMIDate = new Date(loanDate.setDate(loanDate.getDate() + 1 * 7));
+  }else{
+      nextEMIDate = new Date(loanDate.setDate(loanDate.getDate()+1))
+  }
+  let principal = Math.floor(totalLoan/tenure);
+  let int_Amount =  Math.floor((totalLoan*interest_rate)/100);
+
+  if((tenure-1-result.length) == 0){ //if remaining emi is 0
+    let emi = {
+      "date":moment(nextEMIDate).format("DD-MM-YYYY"),
+      "int_amount":int_Amount,
+      "principal":loan_amount,
+      "EMI":int_Amount+loan_amount,
+      "outstanding":0,                        //because remaining outstading is very less so adjusted in principal.
+      "remain_EMI":tenure-1-result.length
+     }
+     result.push(emi);
+           return result;
     }
      let emi = {
          "date":moment(nextEMIDate).format("DD-MM-YYYY"),
