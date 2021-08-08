@@ -14,7 +14,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         scheme_id:Joi.required(),
         interest_rate:Joi.required(),
         loan_amount:Joi.required(),
-        EMI_amount:Joi.required(),
+        // EMI_amount:Joi.required(),
         EMI_payout:Joi.required(),
         tenure:Joi.required(),
 
