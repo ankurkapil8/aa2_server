@@ -21,8 +21,9 @@ app.post("/calculateEMI", async(req, res, next) => {
           message: validationResult.error.details
         });        
       }
+      console.log(req.body.loanStartDate);
       return res.status(200).json({
-        message: calculateEMIFlat(req.body.loan_amount, req.body.loan_amount, req.body.tenure, req.body.interest_rate, req.body.EMI_payout, req.body.loanStartDate)
+        message: calculateEMIFlat(req.body.loan_amount, req.body.loan_amount, req.body.tenure, req.body.interest_rate, req.body.EMI_payout, new Date(req.body.loanStartDate))
       });
     }catch (error) {
         return res.status(500).json({
