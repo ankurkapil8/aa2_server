@@ -88,7 +88,6 @@ function calculateEMIFlat(totalLoan, tenure, interest_rate, EMI_payout, loanDate
     }else if(EMI_payout=="fortnight"){
         nextEMIDate = new Date(loanDate.setDate(loanDate.getDate()+15))
     }
-    //currentEMI = intPerTenure+principalPerTenure;
     outstanding = outstanding-principalPerTenure;
      let emi = {
          "date":moment(nextEMIDate).format("DD-MM-YYYY"),
