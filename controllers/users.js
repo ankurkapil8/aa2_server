@@ -68,10 +68,14 @@ router.post("/login", async (req, res, next) => {
       });
     }
     try{
-      const response = await UserModel.findOne(req.body);
-          var token = jwt.sign({username:response.username,password:response.password,role:response.role}, app.get('superSecret'), { expiresIn: '2h' }); //set jwt token
+      let response = [];
+      let token = "";
+       response = await UserModel.findOne(req.body);
+      if(response.length>0){
+         token = jwt.sign({username:response.username,password:response.password,role:response.role}, app.get('superSecret'), { expiresIn: '2h' }); //set jwt token
+      }
           return res.status(200).json({
-            message: "user login successfully",
+            message: response.length>0?"User login successfully!":"Username or password wrong!",
             jwtToken: token,
             record: response
           });
