@@ -74,7 +74,7 @@ router.post("/login", async (req, res, next) => {
       if(response.length>0){
          token = jwt.sign({username:response.username,password:response.password,role:response.role}, app.get('superSecret'), { expiresIn: '2h' }); //set jwt token
       }
-          return res.status(response.length>0?200:500).json({
+          return res.status(200).json({
             message: response.length>0?"User login successfully!":"Username or password wrong!",
             jwtToken: token,
             record: response
