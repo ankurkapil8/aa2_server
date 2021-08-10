@@ -87,34 +87,6 @@ router.post("/login", async (req, res, next) => {
     }
 
 
-    // UserModel.findOne({ email: req.body.email, password: req.body.password }, function (err, user) {
-    //   if (err) {
-    //     return res.status(500).json({
-    //       message: err
-    //     });
-    //   } else {
-    //     if (user == null) {
-    //       return res.status(500).json({
-    //         message: "Invalid email id or password."
-    //       });
-    //     } else {
-    //       const userObj = {
-    //         isAdmin: user.isAdmin,
-    //         isPrimeMember: user.isPrimeMember,
-    //         phone: user.phone,
-    //         email: user.email,
-    //         password: user.password
-    //       }
-    //       var token = jwt.sign(userObj, app.get('superSecret'), { expiresIn: '2h' }); //set jwt token
-    //       return res.status(200).json({
-    //         message: "user login successfully",
-    //         jwtToken: token,
-    //         record: user
-    //       });
-    //     }
-
-    //   }
-    // })
   } catch (error) {
     return res.status(500).json({
       message: error.message
