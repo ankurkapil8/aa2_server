@@ -6,9 +6,14 @@ var MemberModel = require('../models/MemberModel');
 const { async } = require("q");
 
 
-app.get("/entry", async(req, res, next) => {
-    try{
-        let response = await MemberModel.getAll();
+app.get("/entry/:member_id", async(req, res, next) => {
+    try{ 
+      let filter = "1=1";
+      console.log(req.params)
+      if(req.params.member_id!="all"){
+        filter = `member_id= ${req.params.member_id}`
+      }
+        let response = await MemberModel.getAll(filter);
         return res.status(200).json({
             message: response
           });

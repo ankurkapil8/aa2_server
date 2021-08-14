@@ -13,7 +13,7 @@ function save(data) {
   }
   function getAll(filter){
     return new Promise(function (resolve, reject) {
-        let query=connection.query(`SELECT loan.*,member.* from ${TableName} as loan LEFT JOIN member_details as member ON(loan.member_id=member.member_id) WHERE ${filter} ORDER BY id DESC`, (err, result) => {
+        let query=connection.query(`SELECT loan.*,member.* from ${TableName} as loan INNER JOIN member_details as member ON(loan.member_id=member.member_id) WHERE ${filter} ORDER BY id DESC`, (err, result) => {
         console.log(query.sql);
         if (err) reject(err);
       resolve(result);
