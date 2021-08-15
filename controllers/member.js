@@ -85,4 +85,42 @@ app.get("/entry/:member_id", async(req, res, next) => {
     }
   })
 
+  app.put("/entry/:member_id", async(req, res, next) => {
+    try {
+      const joiSchema = Joi.object({
+        member_id: Joi.required(),
+        }).unknown(true);  
+        const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+        if(validationResult.error){
+          return res.status(500).json({
+            message: validationResult.error.details
+          });        
+        }
+      try{
+        // let updateField = "";
+        
+        // for (const key of Object.keys(req.body)) {
+        //   updateField = updateField+` "${key}"="${req.body[key]}",`;
+        // }
+        // console.log(updateField);        
+        let response = await MemberModel.update(req.body, req.params.member_id);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+  
+    }
+
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+  
+    }
+  
+  });
   module.exports = app;
