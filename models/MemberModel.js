@@ -4,7 +4,8 @@ const TableName = "member_details";
 
 function save(data) {
     return new Promise(function (resolve, reject) {
-        connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
+        let query = connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
+          console.log(query.sql);
         if (err) reject(err);
   
         resolve("data saved successfully!");
