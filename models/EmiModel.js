@@ -20,5 +20,13 @@ function save(data) {
     })
 
   }
-
-  module.exports = {save:save,getAll:getAll};
+  function update(record, id){
+    return new Promise(function (resolve, reject) {   
+      let qry=connection.query(`UPDATE ${TableName} SET idPaid=1 WHERE id=${id}`, (err, result) => {
+      console.log(qry.sql);
+      if (err) reject(err);
+      resolve("payment has been recorded!");
+      })
+    })
+  }
+  module.exports = {save:save, getAll:getAll, update:update};
