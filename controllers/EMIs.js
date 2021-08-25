@@ -2,7 +2,7 @@ var express = require("express");
 const app = express.Router();
 const appE = express();
 const Joi = require('@hapi/joi');
-var GroupLoanModel = require('../models/GroupLoanModel');
+var EmiModel = require('../models/EmiModel');
 const { async } = require("q");
 var moment = require('moment');
 app.post("/calculateEMI", async(req, res, next) => {
@@ -101,5 +101,21 @@ app.post("/calculateEMI", async(req, res, next) => {
   }
   return result;
 }
+app.get("/dueEMIs/:dueDate", async(req, res, next) => {
+  try {
+
+      let dueDate = req.params.dueDate?req.params.dueDate:new Date();
+      let filter = `EMI_date = "${dueDate}"`;
+      let response = await EmiModel.getAll(filter);
+      return res.status(200).json({
+          message: response
+        });
+  }catch (error) {
+        return res.status(500).json({
+          message: error.message
+        });
+      }
+
+})
 app.calculateEMIFlat = calculateEMIFlat;
 module.exports = app;
