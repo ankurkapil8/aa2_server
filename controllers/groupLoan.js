@@ -101,22 +101,25 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         let EMIsDates = [];
         let formatedEmis = [];
         let response = await GroupLoanModel.disburseLoan(req.body.id, req.body.actionType);
-        EMIsDates = EMIs.calculateEMIFlat(response[0][0].loan_amount,response[0][0].Tenure,response[0][0].interest_rate,response[0][0].EMI_payout,response[0][0].application_date);
-        EMIsDates.map(emi=>{
-          let loanDate = emi.date;
-          loanDate = loanDate.split("-");
-          loanDate = new Date(`${loanDate[2]}-${loanDate[1]}-${loanDate[0]}`);
-          formatedEmis.push([
-            response[0][0].loan_account_no,
-            emi.int_amount,
-            emi.principal,
-            emi.EMI,
-            emi.outstanding,
-            loanDate,
-            emi.remain_EMI,
-          ]);
-        });
-      let emiResponse = await EmiModel.save(formatedEmis);
+        if(actionType == 1){
+            EMIsDates = EMIs.calculateEMIFlat(response[0][0].loan_amount,response[0][0].Tenure,response[0][0].interest_rate,response[0][0].EMI_payout,response[0][0].application_date);
+            EMIsDates.map(emi=>{
+              let loanDate = emi.date;
+              loanDate = loanDate.split("-");
+              loanDate = new Date(`${loanDate[2]}-${loanDate[1]}-${loanDate[0]}`);
+              formatedEmis.push([
+                response[0][0].loan_account_no,
+                emi.int_amount,
+                emi.principal,
+                emi.EMI,
+                emi.outstanding,
+                loanDate,
+                emi.remain_EMI,
+              ]);
+            });
+            let emiResponse = await EmiModel.save(formatedEmis);
+  
+        }
         return res.status(200).json({
           message: req.body.actionType==1?"Loan has been disbused!":"Loan has been rejected!"
         });
