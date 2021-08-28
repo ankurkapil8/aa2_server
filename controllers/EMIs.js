@@ -105,7 +105,7 @@ app.get("/dueEMIs/:dueDate", async(req, res, next) => {
   try {
 
       let dueDate = req.params.dueDate?req.params.dueDate:new Date();
-      let filter = `EMI_date = "${dueDate}"`;
+      let filter = `EMI_date = "${dueDate}" AND isPaid=0`;
       let response = await EmiModel.getAll(filter);
       return res.status(200).json({
           message: response
