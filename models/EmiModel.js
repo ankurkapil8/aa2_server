@@ -10,5 +10,23 @@ function save(data) {
       })
     })
   }
+  function getAll(filter = "1=1"){
+    return new Promise(function (resolve, reject) {
+      let query=connection.query(`SELECT emi.*,loan.*,member.member_name from EMIs as emi INNER JOIN loan_applications as loan INNER JOIN member_details as member on (emi.loan_account_no = loan.loan_account_no AND member.member_id=loan.member_id) WHERE ${filter}`, (err, result) => {
+        console.log(query.sql);
+      if (err) reject(err);
+      resolve(result);
+    })
+    })
 
-  module.exports = {save:save};
+  }
+  function update(record, id){
+    return new Promise(function (resolve, reject) {   
+      let qry=connection.query(`UPDATE ${TableName} SET idPaid=1 WHERE id=${id}`, (err, result) => {
+      console.log(qry.sql);
+      if (err) reject(err);
+      resolve("payment has been recorded!");
+      })
+    })
+  }
+  module.exports = {save:save, getAll:getAll, update:update};
