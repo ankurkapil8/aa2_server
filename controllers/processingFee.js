@@ -47,9 +47,15 @@ app.post("/entry", async(req, res, next) => {
   
   });
 
-  app.get("/entry", async(req, res, next) => {
+  app.get("/entry/:id", async(req, res, next) => {
     try{
-        let response = await ProcessingFeeModel.getAll();
+      let filter = "1=1";
+      console.log(req.params)
+      if(req.params.id!="all"){
+        filter = `id= ${req.params.id}`
+      }
+
+        let response = await ProcessingFeeModel.getAll(filter);
         return res.status(200).json({
             message: response
           });
@@ -60,4 +66,61 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   })
+  app.delete("/entry/:id", async(req, res, next) => {
+    try{
+        const joiSchema = Joi.object({
+            id: Joi.required(),
+          }).unknown(true);  
+          const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+          if(validationResult.error){
+            return res.status(500).json({
+              message: validationResult.error.details
+            });        
+          }
+    
+        let response = await ProcessingFeeModel.deleteProcessingFee(req.params.id);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
+
+  app.put("/entry/:id", async(req, res, next) => {
+    try {
+      const joiSchema = Joi.object({
+        id: Joi.required(),
+        }).unknown(true);  
+        const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+        if(validationResult.error){
+          return res.status(500).json({
+            message: validationResult.error.details
+          });        
+        }
+      try{
+        let response = await ProcessingFeeModel.update(req.body, req.params.id);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+  
+    }
+
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+  
+    }
+  
+  });
+
   module.exports = app;

@@ -11,7 +11,7 @@ function save(data) {
       })
     })
   }
-  function getAll(filter){
+  function getAll(filter = "1=1"){
     return new Promise(function (resolve, reject) {
         let query=connection.query(`SELECT loan.*,member.* from ${TableName} as loan INNER JOIN member_details as member ON(loan.member_id=member.member_id) WHERE ${filter} ORDER BY id DESC`, (err, result) => {
         console.log(query.sql);
@@ -34,10 +34,10 @@ function save(data) {
 
   function disburseLoan(id, actionType){
     return new Promise(function (resolve, reject) {
-        let qry=connection.query(`UPDATE ${TableName} SET is_disbursed=? WHERE id=?`,[actionType, id], (err, result) => {
+        let qry=connection.query(`CALL disburseLoan(?, ?);`,[id,actionType], (err, result) => {
        console.log(qry.sql);
         if (err) reject(err);
-      resolve(actionType==1?"Loan has been disbursed!":"Loan has been rejected!");
+      resolve(result);
       })
     })
   }

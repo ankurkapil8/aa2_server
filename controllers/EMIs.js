@@ -68,7 +68,7 @@ app.post("/calculateEMI", async(req, res, next) => {
 //         calculateEMIFlat(totalLoan, loan_amount-principal, tenure, interest_rate, EMI_payout, loanDate, result);
 //      return result;
 // }
-function calculateEMIFlat(totalLoan, tenure, interest_rate, EMI_payout, loanDate){
+ function calculateEMIFlat(totalLoan, tenure, interest_rate, EMI_payout, loanDate){
   let result = [];
   let totalIntAmount = Math.ceil(totalLoan*interest_rate/100);
   let intPerTenure =  Math.ceil(totalIntAmount/tenure);
@@ -101,4 +101,5 @@ function calculateEMIFlat(totalLoan, tenure, interest_rate, EMI_payout, loanDate
   }
   return result;
 }
+app.calculateEMIFlat = calculateEMIFlat;
 module.exports = app;
