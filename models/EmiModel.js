@@ -18,7 +18,6 @@ function save(data) {
       resolve(result);
     })
     })
-
   }
   function update(id){
     return new Promise(function (resolve, reject) {   
@@ -29,4 +28,13 @@ function save(data) {
       })
     })
   }
-  module.exports = {save:save, getAll:getAll, update:update};
+  function getEmiData(filter){
+    return new Promise(function (resolve, reject) {
+      let query=connection.query(`SELECT * FROM ${TableName} WHERE ${filter}`, (err, result) => {
+        console.log(query.sql);
+      if (err) reject(err);
+      resolve(result);
+    })
+    })
+  }
+  module.exports = {save:save, getAll:getAll, update:update, getEmiData:getEmiData};

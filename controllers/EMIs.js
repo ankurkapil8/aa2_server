@@ -111,5 +111,30 @@ app.put("/entry", async(req, res, next) => {
 }
 
 });
+app.get("/entry/:loanAccountNo", async(req, res, next) => {
+  try {
+    const joiSchema = Joi.object({
+      loanAccountNo: Joi.required(),
+    }).unknown(true);  
+    const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+    if(validationResult.error){
+      return res.status(500).json({
+        message: validationResult.error.details
+      });        
+    }
+
+      let filter = `loan_account_no = "${req.params.loanAccountNo}" AND isPaid=1`;
+      let response = await EmiModel.getEmiData(filter);
+      return res.status(200).json({
+          message: response
+        });
+  }catch (error) {
+        return res.status(500).json({
+          message: error.message
+        });
+      }
+
+})
+
 app.calculateEMIFlat = calculateEMIFlat;
 module.exports = app;
