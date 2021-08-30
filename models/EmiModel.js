@@ -20,9 +20,9 @@ function save(data) {
     })
 
   }
-  function update(record, id){
+  function update(id){
     return new Promise(function (resolve, reject) {   
-      let qry=connection.query(`UPDATE ${TableName} SET idPaid=1 WHERE id=${id}`, (err, result) => {
+      let qry=connection.query(`UPDATE ${TableName} SET isPaid=1 WHERE id=${id}`, (err, result) => {
       console.log(qry.sql);
       if (err) reject(err);
       resolve("payment has been recorded!");
