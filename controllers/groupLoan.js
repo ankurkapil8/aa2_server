@@ -101,7 +101,9 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         let EMIsDates = [];
         let formatedEmis = [];
         let response = await GroupLoanModel.disburseLoan(req.body.id, req.body.actionType);
+        console.log(response);
         if(req.body.actionType == 1){
+          console.log("in action");
             EMIsDates = EMIs.calculateEMIFlat(response[0][0].loan_amount,response[0][0].Tenure,response[0][0].interest_rate,response[0][0].EMI_payout,response[0][0].application_date);
             EMIsDates.map(emi=>{
               let loanDate = emi.date;
@@ -117,6 +119,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
                 emi.remain_EMI,
               ]);
             });
+            console.log(formatedEmis);
             let emiResponse = await EmiModel.save(formatedEmis);
   
         }
