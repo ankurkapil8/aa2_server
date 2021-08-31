@@ -13,7 +13,7 @@ function save(data) {
   }
   function getAll(filter = "1=1"){
     return new Promise(function (resolve, reject) {
-      let query=connection.query(`SELECT emi.*,loan.*,member.*,emi.id as emi_id from EMIs as emi INNER JOIN loan_applications as loan INNER JOIN member_details as member on (emi.loan_account_no = loan.loan_account_no AND member.member_id=loan.member_id) WHERE ${filter}`, (err, result) => {
+      let query=connection.query(`SELECT emi.*,loan.*,member.*,emi.id as emi_id, emi.EMI_amount as EMI_amount from EMIs as emi INNER JOIN loan_applications as loan INNER JOIN member_details as member on (emi.loan_account_no = loan.loan_account_no AND member.member_id=loan.member_id) WHERE ${filter}`, (err, result) => {
         console.log(query.sql);
       if (err) reject(err);
       resolve(result);
