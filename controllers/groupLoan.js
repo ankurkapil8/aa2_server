@@ -21,7 +21,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         // EMI_amount:Joi.required(),
         EMI_payout:Joi.required(),
         tenure:Joi.required(),
-
+        village:Joi.alternatives().conditional('EMI_payout', {is:"village", then:Joi.required()}),
       }).unknown(true);  
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
