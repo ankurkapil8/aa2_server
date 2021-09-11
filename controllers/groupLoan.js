@@ -152,7 +152,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
                 filter = "1=1"
                 break;
             default:
-              filter = `id=${req.params.filter}`;
+              filter = `loan.id=${req.params.filter}`;
             break;
         }
         let response = await GroupLoanModel.getAll(filter);
