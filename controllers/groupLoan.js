@@ -21,7 +21,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         // EMI_amount:Joi.required(),
         EMI_payout:Joi.required(),
         tenure:Joi.required(),
-
+        village:Joi.alternatives().conditional('EMI_payout', {is:"village", then:Joi.required()}),
       }).unknown(true);  
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
@@ -104,7 +104,15 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         console.log(response);
         if(req.body.actionType == 1){
           console.log("in action");
-            EMIsDates = EMIs.calculateEMIFlat(response[0][0].loan_amount,response[0][0].Tenure,response[0][0].interest_rate,response[0][0].EMI_payout,response[0][0].application_date);
+            EMIsDates = EMIs.calculateEMIFlat(
+              response[0][0].loan_amount,
+              response[0][0].Tenure,
+              response[0][0].interest_rate,
+              response[0][0].EMI_payout,
+              response[0][0].application_date,
+              response[0][0].week,
+              response[0][0].day,
+              );
             EMIsDates.map(emi=>{
               let loanDate = emi.date;
               loanDate = loanDate.split("-");
@@ -152,7 +160,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
                 filter = "1=1"
                 break;
             default:
-              filter = `id=${req.params.filter}`;
+              filter = `loan.id=${req.params.filter}`;
             break;
         }
         let response = await GroupLoanModel.getAll(filter);
