@@ -81,4 +81,29 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   })
+
+  app.get("/memberByGroupCode/:group_code", async(req, res, next) => {
+    try{
+      const joiSchema = Joi.object({
+        group_code: Joi.required(),
+      }).unknown(true);  
+      const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+      if(validationResult.error){
+        return res.status(500).json({
+          message: validationResult.error.details
+        });        
+      }
+
+        let response = await MemberGroupModel.getMemberListByGroup(req.params.group_code);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
+
   module.exports = app;

@@ -30,6 +30,15 @@ function save(data) {
     })
 
   }
-module.exports = {save:save, getAll:getAll, deleteGroup:deleteGroup};
+  function getMemberListByGroup(group_code){
+    return new Promise(function (resolve, reject) {
+      connection.query(`SELECT * from member_details WHERE member_group_id=? ORDER BY created_at DESC`,[group_code], (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+      })
+    })
+
+  }
+module.exports = {save:save, getAll:getAll, deleteGroup:deleteGroup,getMemberListByGroup:getMemberListByGroup};
 
 
