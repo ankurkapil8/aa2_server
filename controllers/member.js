@@ -4,6 +4,7 @@ const appE = express();
 const Joi = require('@hapi/joi');
 var MemberModel = require('../models/MemberModel');
 const { async } = require("q");
+var GroupLoanModel = require('../models/GroupLoanModel');
 
 
 app.get("/entry/:member_id", async(req, res, next) => {
@@ -123,4 +124,29 @@ app.get("/entry/:member_id", async(req, res, next) => {
     }
   
   });
+
+  app.get("/loanByMember/:member_id", async(req, res, next) => {
+    try{ 
+      const joiSchema = Joi.object({
+        member_id: Joi.required(),
+        }).unknown(true);  
+        const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+        if(validationResult.error){
+          return res.status(500).json({
+            message: validationResult.error.details
+          });        
+        }
+        let filter = `loan.member_id=${req.params.member_id}`
+        let response = await GroupLoanModel.getAll(filter);
+        return res.status(200).json({
+            message: response
+          });
+
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
+
   module.exports = app;
