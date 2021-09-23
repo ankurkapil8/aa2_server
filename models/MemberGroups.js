@@ -13,7 +13,11 @@ function save(data) {
   }
   function getAll(){
     return new Promise(function (resolve, reject) {
-        connection.query(`SELECT * from ${TableName} ORDER BY created_at DESC`, (err, result) => {
+        connection.query(`SELECT member_group.*,
+          count(users.member_group_id) AS member_count
+          FROM member_group 
+          LEFT JOIN member_details AS users ON users.member_group_id = member_group.group_code
+          GROUP BY member_group.group_code order by member_group.created_at DESC`, (err, result) => {
         if (err) reject(err);
       resolve(result);
       })
