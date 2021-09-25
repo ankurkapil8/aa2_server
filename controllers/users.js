@@ -158,6 +158,30 @@ router.delete("/deleteUser/:id", async(req, res, next) => {
   }
 })
 
+router.put("/changePassword", async(req, res, next) => {
+  try {
+    const joiSchema = Joi.object({
+      password: Joi.string().required(),
+      id:Joi.required()
+    }).unknown(true);
+    const validationResult = joiSchema.validate(req.body, { abortEarly: false });
+    if (validationResult.error) {
+      return res.status(500).json({
+        message: validationResult.error.details
+      });
+    }
+    let response = await UserModel.changePassword(req.body.password,req.body.id);
+    return res.status(200).json({
+      message: response
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+});
+
 router.put("/changeRole", async(req, res, next) => {
   try {
     const joiSchema = Joi.object({
