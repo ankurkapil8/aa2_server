@@ -170,6 +170,10 @@ router.put("/changePassword", async(req, res, next) => {
         message: validationResult.error.details
       });
     }
+    let hashpassword = encrypt(req.body.password);
+    console.log(hashpassword);
+    req.body["password"] = hashpassword;
+
     let response = await UserModel.changePassword(req.body.password,req.body.id);
     return res.status(200).json({
       message: response
