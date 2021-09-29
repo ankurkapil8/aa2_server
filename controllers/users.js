@@ -19,7 +19,7 @@ router.post("/registration", async (req, res, next) => {
       password: Joi.required().messages({
         'any.required': `"password" is a required field`
       }),
-    });
+    }).unknown(true);
     const validationResult = joiSchema.validate(req.body, { abortEarly: false });
     if (validationResult.error) {
       return res.status(500).json({
