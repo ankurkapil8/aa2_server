@@ -5,29 +5,30 @@ const db = require("../config");
 const UserModel = require("../models/UserModel");
 const InqueryModel = require("../models/InqueryModel");
 var sendObj = require("../util/sendMail")
-
+const { encrypt} = require('../util/crypto'); 
 const Joi = require('@hapi/joi');
 var jwt = require('jsonwebtoken');
 const { async } = require("q");
 app.set('superSecret', "kanbafood");
-
 router.post("/registration", async (req, res, next) => {
   try {
     const joiSchema = Joi.object({
       username: Joi.required(),
-      password: Joi.required(),
       name: Joi.required(),
       role: Joi.required(),
       password: Joi.required().messages({
         'any.required': `"password" is a required field`
       }),
-    });
+    }).unknown(true);
     const validationResult = joiSchema.validate(req.body, { abortEarly: false });
     if (validationResult.error) {
       return res.status(500).json({
         message: validationResult.error.details
       });
     }
+    let hashpassword = encrypt(req.body.password);
+    console.log(hashpassword);
+    req.body["password"] = hashpassword;
     var newUser = {
       created_at: new Date().getTime(),
       status: 0,
@@ -120,19 +121,63 @@ router.post("/submitInquery", (req, res, next) => {
     });
   }
 })
-router.get("/userList", (req, res, next) => {
+router.get("/userList", async(req, res, next) => {
   try {
-    UserModel.find({}, function (err, users) {
-      if (err) {
-        return res.status(500).json({
-          message: err
+
+    let response = await UserModel.getAll("username!='admin'");
+    return res.status(200).json({
+      message: response,
+    });    
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+});  
+router.delete("/deleteUser/:id", async(req, res, next) => {
+  try{
+      const joiSchema = Joi.object({
+          id: Joi.required(),
+        }).unknown(true);  
+        const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+        if(validationResult.error){
+          return res.status(500).json({
+            message: validationResult.error.details
+          });        
+        }
+  
+      let response = await UserModel.deleteUser(req.params.id);
+      return res.status(200).json({
+          message: response
         });
-      } else {
-        return res.status(200).json({
-          record: users
-        });
-      }
-    })
+
+    }catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+})
+
+router.put("/changePassword", async(req, res, next) => {
+  try {
+    const joiSchema = Joi.object({
+      password: Joi.string().required(),
+      id:Joi.required()
+    }).unknown(true);
+    const validationResult = joiSchema.validate(req.body, { abortEarly: false });
+    if (validationResult.error) {
+      return res.status(500).json({
+        message: validationResult.error.details
+      });
+    }
+    let hashpassword = encrypt(req.body.password);
+    console.log(hashpassword);
+    req.body["password"] = hashpassword;
+
+    let response = await UserModel.changePassword(req.body.password,req.body.id);
+    return res.status(200).json({
+      message: response
+    });
 
   } catch (error) {
     return res.status(500).json({
@@ -141,10 +186,11 @@ router.get("/userList", (req, res, next) => {
   }
 });
 
-router.put("/makeOrRemovePrimeMember", (req, res, next) => {
+router.put("/changeRole", async(req, res, next) => {
   try {
     const joiSchema = Joi.object({
-      email: Joi.string().required(),
+      role: Joi.string().required(),
+      id:Joi.required()
     }).unknown(true);
     const validationResult = joiSchema.validate(req.body, { abortEarly: false });
     if (validationResult.error) {
@@ -152,17 +198,10 @@ router.put("/makeOrRemovePrimeMember", (req, res, next) => {
         message: validationResult.error.details
       });
     }
-    UserModel.updateOne({ email: req.body.email }, req.body, function (err) {
-      if (err) {
-        return res.status(500).json({
-          message: err
-        });
-      } else {
-        return res.status(200).json({
-          record: "user updated successfully."
-        });
-      }
-    })
+    let response = await UserModel.changeRole(req.body.role,req.body.id);
+    return res.status(200).json({
+      message: response
+    });
 
   } catch (error) {
     return res.status(500).json({
