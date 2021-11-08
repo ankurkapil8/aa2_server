@@ -2,17 +2,17 @@ var express = require("express");
 const app = express.Router();
 const appE = express();
 const Joi = require('@hapi/joi');
-var RdApplicationModel = require('../models/RdApplicationModel');
+var AccountDepositedModel = require('../models/AccountDepositedModel.js');
 const { async } = require("q");
 
 app.post("/entry", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
-        account_holder_name: Joi.required(),
-        rd_amount:Joi.required(),
-        period:Joi.required(),
-        tenure:Joi.required(),
+        account_number: Joi.required(),
         agent_id:Joi.required(),
+        deposited_amount:Joi.required(),
+        deposited_date:Joi.required(),
+        is_account_open_amount:Joi.required()
       }).unknown(true); 
 
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
@@ -21,9 +21,8 @@ app.post("/entry", async(req, res, next) => {
           message: validationResult.error.details
         });        
       }
-      
       try{
-        let response = await RdApplicationModel.save(req.body);
+        let response = await AccountDepositedModel.save(req.body);
         return res.status(200).json({
             message: response
           });
@@ -40,13 +39,9 @@ app.post("/entry", async(req, res, next) => {
     }
   });
 
-  app.get("/entry/:agent_id", async(req, res, next) => {
+  app.get("/entry", async(req, res, next) => {
     try{
-        let queryParam = "1=1";
-        if(req.params.agent_id!="all"){
-            queryParam=`agent_id = ${req.params.agent_id}`
-        }
-        let response = await RdApplicationModel.getAll(queryParam);
+        let response = await AccountDepositedModel.getAll();
         return res.status(200).json({
             message: response
           });
@@ -56,14 +51,19 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   })
-
-  app.get("/entryById/:id", async(req, res, next) => {
+  app.get("/entryByAccount/:account_number", async(req, res, next) => {
     try{
-        let queryParam=`id = ${req.params.id}`
-        // if(req.params.agent_id!="all"){
-        //     queryParam=`agent_id = ${req.params.agent_id}`
-        // }
-        let response = await RdApplicationModel.getAll(queryParam);
+        const joiSchema = Joi.object({
+            account_number: Joi.required(),
+          }).unknown(true);  
+          const validationResult = joiSchema.validate(req.params, { abortEarly: false });
+          if(validationResult.error){
+            return res.status(500).json({
+              message: validationResult.error.details
+            });        
+          }
+          let payload = `account_number="${req.params.account_number}"`;
+        let response = await AccountDepositedModel.getAll(payload);
         return res.status(200).json({
             message: response
           });
@@ -85,7 +85,7 @@ app.post("/entry", async(req, res, next) => {
               message: validationResult.error.details
             });        
           }
-        let response = await RdApplicationModel.deleteAccount(req.params.id);
+        let response = await AccountDepositedModel.deleteDeposit(req.params.id);
         return res.status(200).json({
             message: response
           });
@@ -95,35 +95,5 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   })
-
-  app.post("/approveAccount", async(req, res, next) => {
-    try {
-      const joiSchema = Joi.object({
-        id: Joi.required(),
-        actionType:Joi.required(),
-        agent_id:Joi.required()
-      }).unknown(true);  
-      const validationResult = joiSchema.validate(req.body, { abortEarly: false });
-      if(validationResult.error){
-        return res.status(500).json({
-          message: validationResult.error.details
-        });        
-      }
-      try{
-        let response = await RdApplicationModel.approveAccount(req.body.id, req.body.actionType);
-        return res.status(200).json({
-            message: response
-          });
-      }catch (error) {
-      return res.status(500).json({
-        message: error.message
-      });
-    }
-    } catch (error) {
-      return res.status(500).json({
-        message: error.message
-      });
-    }
-  });
 
   module.exports = app;

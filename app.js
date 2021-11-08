@@ -20,6 +20,7 @@ require("./config");
  const dashboardRoutes = require("./controllers/dashboard")
  const rdschemeRoutes = require("./controllers/rdScheme")
  const rdapplicationRoutes = require("./controllers/rdApplications")
+ const accountDepositedRoutes = require("./controllers/AccountDeposited")
 
 // var PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
@@ -59,7 +60,7 @@ app.use("/api/village",VillageRoutes);
 app.use("/api/dashboard",dashboardRoutes);
 app.use("/api/rdScheme",rdschemeRoutes);
 app.use("/api/rdApplication",rdapplicationRoutes);
-
+app.use("/api/accountDeposited",accountDepositedRoutes);
   // app.use("/", (req, res, next) => {
 //   // sendObj.sendMail().then(res=>{
 //   //   console.log(res);
