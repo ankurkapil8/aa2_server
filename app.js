@@ -21,6 +21,7 @@ require("./config");
  const rdschemeRoutes = require("./controllers/rdScheme")
  const rdapplicationRoutes = require("./controllers/rdApplications")
  const accountDepositedRoutes = require("./controllers/AccountDeposited")
+ const applicationVersionRoutes = require("./controllers/applicationVersion")
 
 // var PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
@@ -61,6 +62,8 @@ app.use("/api/dashboard",dashboardRoutes);
 app.use("/api/rdScheme",rdschemeRoutes);
 app.use("/api/rdApplication",rdapplicationRoutes);
 app.use("/api/accountDeposited",accountDepositedRoutes);
+app.use("/api/applicationVersion",applicationVersionRoutes);
+
   // app.use("/", (req, res, next) => {
 //   // sendObj.sendMail().then(res=>{
 //   //   console.log(res);
