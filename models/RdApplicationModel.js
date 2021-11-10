@@ -16,6 +16,7 @@ function save(data) {
   function getAll(filter = "1=1"){
     return new Promise(function (resolve, reject) {
         connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY id DESC`, (err, result) => {
+          console.log(filter);
         if (err) reject(err);
       resolve(result);
       })
