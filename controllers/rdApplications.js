@@ -47,8 +47,13 @@ app.post("/entry", async(req, res, next) => {
             queryParam=`agent_id = ${req.params.agent_id}`
         }
         let response = await RdApplicationModel.getAll(queryParam);
+        let formatedRes = response.map(account=>{
+          let maturity = calculateMaturity(account);
+          account["maturity_amount"] = maturity;
+          return account;
+        })
         return res.status(200).json({
-            message: response
+            message: formatedRes
           });
       }catch (error) {
       return res.status(500).json({
@@ -126,4 +131,18 @@ app.post("/entry", async(req, res, next) => {
     }
   });
 
+  const calculateMaturity= (accountDetails)=>{
+    var amt=parseFloat(accountDetails.rd_amount);
+    var rate=parseFloat(accountDetails.interest_rate);
+    var months=parseInt(accountDetails.period);
+    var freq=parseInt(3);
+    //var months=year*12;
+    var maturity=0;
+    for(var i=1; i<=months;i++){
+        maturity+=amt*Math.pow((1+((rate/100)/freq)), freq*((months-i+1)/12));
+
+    }
+
+    return parseInt(maturity);
+}
   module.exports = app;
