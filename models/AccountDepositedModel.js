@@ -56,10 +56,20 @@ function save(data) {
     if(accountDetails.tenure=="monthly"){
       count = accountDetails.period;
     }
+    if(accountDetails.tenure=="daily"){
+      var createdAt = accountDetails.createdAt;
+      createdAt = moment(createdAt);
+      var lastDepositDate = moment(createdAt).add(accountDetails.period,"months");
+      count =lastDepositDate.diff(moment(createdAt),"days");
+    }
     for(let i=0;i<count;i++){
       if(accountDetails.tenure=="monthly"){
         depositDates.push(moment(created_at).add(i,"months"));
       }
+      if(accountDetails.tenure=="daily"){
+        depositDates.push(moment(created_at).add(i,"days"));
+      }
+
     }
     return depositDates;
   }

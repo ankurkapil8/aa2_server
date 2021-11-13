@@ -57,12 +57,14 @@ function save(data) {
               )
             });
             if(userData[0].initial_deposited_amount && userData[0].initial_deposited_amount!=0){
-              depositPayload[0][5] = 1;
+              if(depositPayload.length){
+                depositPayload[0][5] = 1;
+                depositPayload[0][4] = 1;
+              }
             }
             let depositResponse = await AccountDepositedModel.save(depositPayload);
 
           }
-          console.log(depositPayload);
         if (err) reject(err);
       resolve(`Account has been ${actionType==1?"approved":"rejected"}!`);
       })
