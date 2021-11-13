@@ -63,4 +63,4 @@ function save(data) {
     }
     return depositDates;
   }
-module.exports = { save:save, getAll:getAll, deleteDeposit:deleteDeposit, calculateDepositDate:calculateDepositDate }
+module.exports = { save:save, getAll:getAll, deleteDeposit:deleteDeposit, calculateDepositDate:calculateDepositDate, update:update }
