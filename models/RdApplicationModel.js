@@ -49,7 +49,7 @@ function save(data) {
                 [
                       accountNumber,
                       agent_id,
-                      userData[0].initial_deposited_amount,
+                      userData[0].rd_amount,
                       new Date(dd),
                       0,
                       0
