@@ -38,6 +38,37 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   });
+  app.put("/entry", async(req, res, next) => {
+    try {
+      const joiSchema = Joi.object({
+        account_number: Joi.required(),
+        deposited_date: Joi.required(),
+      }).unknown(true);  
+      const validationResult = joiSchema.validate(req.body, { abortEarly: false });
+      if(validationResult.error){
+        return res.status(500).json({
+          message: validationResult.error.details
+        });        
+      }
+      try{
+        let response = await AccountDepositedModel.update(req.body);
+        return res.status(200).json({
+            message: response
+          });
+  
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+  
+    }
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  
+  });
 
   app.get("/entry", async(req, res, next) => {
     try{
