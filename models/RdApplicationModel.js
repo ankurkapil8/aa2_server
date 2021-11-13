@@ -2,6 +2,7 @@ const { async } = require("q");
 const connection = require("../config");
 const TableName = "rd_applications";
 const moment = require('moment');
+const AccountDepositedModel = require("./AccountDepositedModel");
 function save(data) {
     return new Promise(function (resolve, reject) {
         connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
@@ -33,25 +34,35 @@ function save(data) {
     })
 
   }
-   function approveAccount(id, actionType,agent_id){
+    function approveAccount(id, actionType,agent_id){
     return new Promise(async function (resolve, reject) {
       let userData = await getAll("id="+id);
+      let depositPayload = [];
       let accountNumber = generateAccountNumber(userData[0].created_at, id);
-        let qry=connection.query(`UPDATE ${TableName} SET is_approved=?, account_number=? WHERE id=?`,[actionType, accountNumber, id], (err, result) => {
-
-          if(userData[0].initial_deposited_amount && userData[0].initial_deposited_amount!=0 && actionType==1){
-            let formatDepositPayload = {
-              "account_number":accountNumber,
-              "agent_id":agent_id,
-              "deposited_amount":userData[0].initial_deposited_amount,
-              "deposited_date":new Date(),
-              "is_account_open_amount":1
+        let qry=connection.query(`UPDATE ${TableName} SET is_approved=?, account_number=? WHERE id=?`,[actionType, accountNumber, id], async(err, result) => {
+          let accountDetails = userData[0];
+          accountDetails.account_number = accountNumber;
+          if(actionType==1){
+            let depositDates = AccountDepositedModel.calculateDepositDate(accountDetails);
+            depositDates.map(dd=>{
+              depositPayload.push(
+                [
+                      accountNumber,
+                      agent_id,
+                      userData[0].initial_deposited_amount,
+                      new Date(dd),
+                      0,
+                      0
+                ]
+              )
+            });
+            if(userData[0].initial_deposited_amount && userData[0].initial_deposited_amount!=0){
+              depositPayload[0][5] = 1;
             }
-            connection.query(`INSERT INTO account_deposited SET ?`, formatDepositPayload, (err, result) => {
-              if (err) reject(err);
-            })
+            let depositResponse = await AccountDepositedModel.save(depositPayload);
+
           }
-          console.log(qry.sql);
+          console.log(depositPayload);
         if (err) reject(err);
       resolve(`Account has been ${actionType==1?"approved":"rejected"}!`);
       })

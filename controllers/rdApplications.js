@@ -65,10 +65,11 @@ app.post("/entry", async(req, res, next) => {
   app.get("/entryById/:id", async(req, res, next) => {
     try{
         let queryParam=`id = ${req.params.id}`
-        // if(req.params.agent_id!="all"){
-        //     queryParam=`agent_id = ${req.params.agent_id}`
-        // }
         let response = await RdApplicationModel.getAll(queryParam);
+          if(response[0]){
+            let maturity = calculateMaturity(response[0]);
+            response[0]["maturity_amount"] = maturity;
+          }
         return res.status(200).json({
             message: response
           });
@@ -115,7 +116,8 @@ app.post("/entry", async(req, res, next) => {
         });        
       }
       try{
-        let response = await RdApplicationModel.approveAccount(req.body.id, req.body.actionType);
+        let response = await RdApplicationModel.approveAccount(req.body.id, req.body.actionType, req.body.agent_id);
+
         return res.status(200).json({
             message: response
           });

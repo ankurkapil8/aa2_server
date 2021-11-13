@@ -22,7 +22,8 @@ require("./config");
  const rdapplicationRoutes = require("./controllers/rdApplications")
  const accountDepositedRoutes = require("./controllers/AccountDeposited")
  const applicationVersionRoutes = require("./controllers/applicationVersion")
-
+ const smsRoutes = require("./controllers/sms")
+ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // var PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
 //     console.log(`Server running on port ${PORT}`);
@@ -63,6 +64,7 @@ app.use("/api/rdScheme",rdschemeRoutes);
 app.use("/api/rdApplication",rdapplicationRoutes);
 app.use("/api/accountDeposited",accountDepositedRoutes);
 app.use("/api/applicationVersion",applicationVersionRoutes);
+app.use("/api/sms",smsRoutes);
 
   // app.use("/", (req, res, next) => {
 //   // sendObj.sendMail().then(res=>{
