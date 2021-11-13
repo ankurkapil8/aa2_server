@@ -32,7 +32,7 @@ function save(data) {
   }
   function update(payload){
     return new Promise(function (resolve, reject) {   
-      let qry=connection.query(`UPDATE ${TableName} SET is_deposited=1 WHERE account_number=${payload.account_number} AND deposited_date=${payload.deposited_date}`, (err, result) => {
+      let qry=connection.query(`UPDATE ${TableName} SET is_deposited=1 WHERE account_number="${payload.account_number}" AND deposited_date="${payload.deposited_date}"`, (err, result) => {
       console.log(qry.sql);
       if (err) reject(err);
       resolve("payment has been recorded!");
