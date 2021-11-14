@@ -23,7 +23,8 @@ function save(data) {
 
   function getAll(filter = "1=1"){
     return new Promise(function (resolve, reject) {
-        connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY id DESC`, (err, result) => {
+      let qry =connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY id DESC`, (err, result) => {
+        console.log(qry.sql);
         if (err) reject(err);
       resolve(result);
       })
