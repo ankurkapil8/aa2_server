@@ -4,7 +4,7 @@ const appE = express();
 const Joi = require('@hapi/joi');
 var AccountDepositedModel = require('../models/AccountDepositedModel.js');
 const { async } = require("q");
-
+const moment = require("moment"); 
 app.post("/entry", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
@@ -70,9 +70,13 @@ app.post("/entry", async(req, res, next) => {
   
   });
 
-  app.get("/entry", async(req, res, next) => {
+  app.get("/entry/:id", async(req, res, next) => {
     try{
-        let response = await AccountDepositedModel.getAll();
+      let queryParam = "1=1";
+      if(req.params.agent_id!="all"){
+          queryParam=`agent_id = ${req.params.agent_id}`
+      }
+        let response = await AccountDepositedModel.getAll(queryParam);
         return res.status(200).json({
             message: response
           });
@@ -82,6 +86,33 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   })
+  app.get("/entryByDate/:agent_id/:deposited_date", async(req, res, next) => {
+    try{
+      let queryParam = "1=1";
+      if(req.params.agent_id!="all" && req.params.deposited_date!="all"){
+        queryParam=`agent_id = ${req.params.agent_id} && deposited_date = "${req.params.deposited_date}"`
+      }
+      else if(req.params.deposited_date!="all"){
+        queryParam=`deposited_date = "${req.params.deposited_date}"`
+      }else if(req.params.agent_id!="all"){
+        queryParam=`agent_id = ${req.params.agent_id}`
+      }
+      console.log(queryParam);
+      let response = await AccountDepositedModel.getAll(queryParam);
+      let formatedData = response.map(data=>{
+        data.deposited_date = moment(data.deposited_date).format("DD-MM-YYYY");
+        return data;
+      });
+        return res.status(200).json({
+            message: formatedData
+          });
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
+
   app.get("/entryByAccount/:account_number", async(req, res, next) => {
     try{
         const joiSchema = Joi.object({
