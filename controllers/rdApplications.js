@@ -4,6 +4,7 @@ const appE = express();
 const Joi = require('@hapi/joi');
 var RdApplicationModel = require('../models/RdApplicationModel');
 const { async } = require("q");
+const calculateMaturity = require("../util/calculateMaturity");
 
 app.post("/entry", async(req, res, next) => {
     try {
@@ -48,7 +49,7 @@ app.post("/entry", async(req, res, next) => {
         }
         let response = await RdApplicationModel.getAll(queryParam);
         let formatedRes = response.map(account=>{
-          let maturity = calculateMaturity(account);
+          let maturity = calculateMaturity.maturity(account);
           account["maturity_amount"] = maturity;
           return account;
         })
@@ -67,7 +68,7 @@ app.post("/entry", async(req, res, next) => {
         let queryParam=`id = ${req.params.id}`
         let response = await RdApplicationModel.getAll(queryParam);
           if(response[0]){
-            let maturity = calculateMaturity(response[0]);
+            let maturity = calculateMaturity.maturity(response[0]);
             response[0]["maturity_amount"] = maturity;
           }
         return res.status(200).json({
@@ -133,18 +134,18 @@ app.post("/entry", async(req, res, next) => {
     }
   });
 
-  const calculateMaturity= (accountDetails)=>{
-    var amt=parseFloat(accountDetails.rd_amount);
-    var rate=parseFloat(accountDetails.interest_rate);
-    var months=parseInt(accountDetails.period);
-    var freq=parseInt(3);
-    //var months=year*12;
-    var maturity=0;
-    for(var i=1; i<=months;i++){
-        maturity+=amt*Math.pow((1+((rate/100)/freq)), freq*((months-i+1)/12));
+//   const calculateMaturity= (accountDetails)=>{
+//     var amt=parseFloat(accountDetails.rd_amount);
+//     var rate=parseFloat(accountDetails.interest_rate);
+//     var months=parseInt(accountDetails.period);
+//     var freq=parseInt(3);
+//     //var months=year*12;
+//     var maturity=0;
+//     for(var i=1; i<=months;i++){
+//         maturity+=amt*Math.pow((1+((rate/100)/freq)), freq*((months-i+1)/12));
 
-    }
+//     }
 
-    return parseInt(maturity);
-}
+//     return parseInt(maturity);
+// }
   module.exports = app;
