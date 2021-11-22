@@ -8,13 +8,13 @@ var AccountDepositedModel = require('../models/AccountDepositedModel');
 const { async } = require("q");
 const calculateMaturity = require("../util/calculateMaturity");
 
-app.post("/entry", async(req, res, next) => {
+  app.post("/entry", async(req, res, next) => {
     try {
       const joiSchema = Joi.object({
         account_holder_name: Joi.required(),
-        rd_amount:Joi.required(),
-        period:Joi.required(),
-        tenure:Joi.required(),
+        // rd_amount:Joi.required(),
+        // period:Joi.required(),
+        // tenure:Joi.required(),
         agent_id:Joi.required(),
       }).unknown(true); 
 
@@ -46,17 +46,13 @@ app.post("/entry", async(req, res, next) => {
   app.get("/entry/:agent_id", async(req, res, next) => {
     try{
         let queryParam = "1=1";
+        let formatedRes = [];
         if(req.params.agent_id!="all"){
             queryParam=`agent_id = ${req.params.agent_id}`
         }
         let response = await RdApplicationModel.getAll(queryParam);
-        let formatedRes = response.map(account=>{
-          let maturity = calculateMaturity.maturity(account);
-          account["maturity_amount"] = maturity;
-          return account;
-        })
         return res.status(200).json({
-            message: formatedRes
+            message: response
           });
       }catch (error) {
       return res.status(500).json({
@@ -69,10 +65,6 @@ app.post("/entry", async(req, res, next) => {
     try{
         let queryParam=`id = ${req.params.id}`
         let response = await RdApplicationModel.getAll(queryParam);
-          if(response[0]){
-            let maturity = calculateMaturity.maturity(response[0]);
-            response[0]["maturity_amount"] = maturity;
-          }
         return res.status(200).json({
             message: response
           });
