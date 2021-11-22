@@ -13,7 +13,7 @@ const moment = require("moment");
 //   }
 function save(data) {
   return new Promise(function (resolve, reject) {
-      let qry = connection.query(`INSERT INTO ${TableName} (account_number, agent_id, deposited_amount, deposited_date, is_deposited, is_account_open_amount) values ?`, [data], (err, result) => {
+    let qry = connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
       console.log(qry.sql);
         if (err) reject(err);
       resolve("Data saved!");
