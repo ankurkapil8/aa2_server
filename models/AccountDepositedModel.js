@@ -74,4 +74,14 @@ function save(data) {
     }
     return depositDates;
   }
-module.exports = { save:save, getAll:getAll, deleteDeposit:deleteDeposit, calculateDepositDate:calculateDepositDate, update:update }
+
+  function getAllGroupBy(filter){
+    return new Promise(function (resolve, reject) {
+      let qry =connection.query(`SELECT SUM(deposited_amount) as total, agent_id, deposited_date, is_deposited FROM ${TableName} where ${filter} group by agent_id;`, (err, result) => {
+        console.log(qry.sql);
+        if (err) reject(err);
+      resolve(result);
+      })
+    })
+  }
+module.exports = { save:save, getAll:getAll, deleteDeposit:deleteDeposit, calculateDepositDate:calculateDepositDate, update:update, getAllGroupBy:getAllGroupBy }
