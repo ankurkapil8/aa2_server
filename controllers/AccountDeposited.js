@@ -157,5 +157,31 @@ app.post("/entry", async(req, res, next) => {
       });
     }
   })
+  app.get("/entryGroupBy/:agent_id/:deposited_date", async(req, res, next) => {
+    try{
+      let queryParam = "is_deposited=1";
+      if(req.params.agent_id!="all" && req.params.deposited_date!="all"){
+        queryParam=`is_deposited=1 && agent_id = ${req.params.agent_id} && deposited_date = "${req.params.deposited_date}"`
+      }
+      else if(req.params.deposited_date!="all"){
+        queryParam=`is_deposited=1 && deposited_date = "${req.params.deposited_date}"`
+      }else if(req.params.agent_id!="all"){
+        queryParam=`is_deposited=1 && agent_id = ${req.params.agent_id}`
+      }
+      console.log(queryParam);
+      let response = await AccountDepositedModel.getAllGroupBy(queryParam);
+      // let formatedData = response.map(data=>{
+      //   data.deposited_date = moment(data.deposited_date).format("DD-MM-YYYY");
+      //   return data;
+      // });
+        return res.status(200).json({
+            message: response
+          });
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
 
   module.exports = app;
