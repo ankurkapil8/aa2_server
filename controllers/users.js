@@ -124,7 +124,7 @@ router.post("/submitInquery", (req, res, next) => {
 router.get("/userList", async(req, res, next) => {
   try {
 
-    let response = await UserModel.getAll("username!='admin'");
+    let response = await UserModel.getAll();
     return res.status(200).json({
       message: response,
     });    
