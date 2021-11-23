@@ -16,7 +16,7 @@ function save(data) {
 
   function getAll(filter = "1=1"){
     return new Promise(function (resolve, reject) {
-        connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY id DESC`, (err, result) => {
+        connection.query(`SELECT *, (select SUM(deposited_amount) from account_deposited where account_number=${TableName}.account_number AND is_deposited=1)as totalDeposited from ${TableName}  WHERE ${filter} ORDER BY id DESC`, (err, result) => {
           console.log(filter);
         if (err) reject(err);
       resolve(result);
@@ -37,31 +37,31 @@ function save(data) {
     function approveAccount(id, actionType,agent_id){
     return new Promise(async function (resolve, reject) {
       let userData = await getAll("id="+id);
-      let depositPayload = [];
+      //let depositPayload = [];
       let accountNumber = generateAccountNumber(userData[0].created_at, id);
         let qry=connection.query(`UPDATE ${TableName} SET is_approved=?, account_number=? WHERE id=?`,[actionType, accountNumber, id], async(err, result) => {
           let accountDetails = userData[0];
           accountDetails.account_number = accountNumber;
-          if(actionType==1){
-            let depositDates = AccountDepositedModel.calculateDepositDate(accountDetails);
-            depositDates.map(dd=>{
-              depositPayload.push(
-                [
-                      accountNumber,
-                      agent_id,
-                      userData[0].rd_amount,
-                      new Date(dd),
-                      0,
-                      0
-                ]
-              )
-            });
-            if(userData[0].initial_deposited_amount && userData[0].initial_deposited_amount!=0){
-              if(depositPayload.length){
-                depositPayload[0][5] = 1;
-                depositPayload[0][4] = 1;
+          if(actionType==1 && userData[0].rd_amount !=0){
+            //let depositDates = AccountDepositedModel.calculateDepositDate(accountDetails);
+            // depositDates.map(dd=>{
+            //   depositPayload.push(
+              let depositPayload={
+                      "account_number":accountNumber,
+                      "agent_id":agent_id,
+                      "deposited_amount":userData[0].rd_amount,
+                      "deposited_date":moment().format("YYYY-MM-DD"),
+                      "is_deposited":1,
+                      "is_account_open_amount":1
               }
-            }
+            //   )
+            // });
+            //if(userData[0].initial_deposited_amount && userData[0].initial_deposited_amount!=0){
+              //if(depositPayload.length){
+                //depositPayload[0][5] = 1;
+                //depositPayload[0][4] = 1;
+              //}
+            //}
             let depositResponse = await AccountDepositedModel.save(depositPayload);
 
           }
