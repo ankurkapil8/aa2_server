@@ -41,7 +41,14 @@ function save(data) {
       resolve(`Account has been deleted!`);
       })
     })
-
+  }
+  function closeAccount(actionType,account_number){
+    return new Promise(function (resolve, reject) {
+      let qry=connection.query(`UPDATE ${TableName} SET is_account_closed=? WHERE account_number=?`,[actionType, account_number], async(err, result) => {
+        if (err) reject(err);
+      resolve(actionType==1?`Account number ${account_number} has been closed.`:`Account close request is in progress.`);
+      })
+    })
   }
     function approveAccount(id, actionType,agent_id){
     return new Promise(async function (resolve, reject) {
@@ -82,4 +89,10 @@ function save(data) {
   function generateAccountNumber(date,id) {
     return `RD${moment().format("DDMMYYYY")}${id}`;
   }
-module.exports = { save:save, getAll:getAll, deleteAccount:deleteAccount, approveAccount,approveAccount, getByAccountNumber:getByAccountNumber}
+module.exports = { save:save, 
+                  getAll:getAll, 
+                  deleteAccount:deleteAccount, 
+                  approveAccount,approveAccount, 
+                  getByAccountNumber:getByAccountNumber,
+                  closeAccount:closeAccount
+                }
