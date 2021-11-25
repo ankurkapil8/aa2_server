@@ -2,7 +2,10 @@ var express = require("express");
 const app = express.Router();
 const appE = express();
 const Joi = require('@hapi/joi');
+const SmsApi = require("../util/SmsApi");
 var AccountDepositedModel = require('../models/AccountDepositedModel.js');
+var RdApplicationModel = require('../models/RdApplicationModel.js');
+
 const { async } = require("q");
 const moment = require("moment"); 
 app.post("/entry", async(req, res, next) => {
@@ -12,6 +15,7 @@ app.post("/entry", async(req, res, next) => {
         agent_id:Joi.required(),
         deposited_amount:Joi.required(),
         deposited_date:Joi.required(),
+        is_deposited:Joi.required(),
         is_account_open_amount:Joi.required()
       }).unknown(true); 
 
@@ -23,6 +27,15 @@ app.post("/entry", async(req, res, next) => {
       }
       try{
         let response = await AccountDepositedModel.save(req.body);
+        let accountDetails = await RdApplicationModel.getAll(`account_number="${req.body.account_number}"`);
+        if(accountDetails[0].phone){
+          let payload = {
+            "messageVar":`${accountDetails[0].account_holder_name}|${accountDetails[0].account_number}|${req.body.deposited_amount}|${moment().format("DD-MM-YYYY").toString()}|${accountDetails[0].totalDeposited}`,
+            "phone":accountDetails[0].phone
+          }
+          console.log(payload);
+          SmsApi.sendAccountDeposit(payload);
+        }
         return res.status(200).json({
             message: response
           });

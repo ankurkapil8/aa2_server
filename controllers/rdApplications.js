@@ -60,6 +60,19 @@ const calculateMaturity = require("../util/calculateMaturity");
       });
     }
   })
+  app.get("/entryByAccountNumber/:account_number", async(req, res, next) => {
+    try{
+        let queryParam = `account_number="${req.params.account_number}"`;
+        let response = await RdApplicationModel.getByAccountNumber(queryParam);
+        return res.status(200).json({
+            message: response
+          });
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  })
 
   app.get("/entryById/:id", async(req, res, next) => {
     try{
