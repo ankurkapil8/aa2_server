@@ -24,7 +24,16 @@ function save(data) {
     })
 
   }
+  function getByAccountNumber(account_number){
+    return new Promise(function (resolve, reject) {
+      connection.query(`SELECT * from ${TableName}  WHERE ${account_number} ORDER BY id DESC`, (err, result) => {
+        console.log(account_number);
+      if (err) reject(err);
+      resolve(result);
+      })
+    })
 
+  }
   function deleteAccount(id){
     return new Promise(function (resolve, reject) {
         var query=connection.query(`DELETE from ${TableName} WHERE id = ?`,[id], (err, result) => {
@@ -73,4 +82,4 @@ function save(data) {
   function generateAccountNumber(date,id) {
     return `RD${moment().format("DDMMYYYY")}${id}`;
   }
-module.exports = { save:save, getAll:getAll, deleteAccount:deleteAccount, approveAccount,approveAccount}
+module.exports = { save:save, getAll:getAll, deleteAccount:deleteAccount, approveAccount,approveAccount, getByAccountNumber:getByAccountNumber}
