@@ -103,5 +103,6 @@ module.exports = { save:save,
                   deleteAccount:deleteAccount, 
                   approveAccount,approveAccount, 
                   getByAccountNumber:getByAccountNumber,
-                  closeAccount:closeAccount
+                  closeAccount:closeAccount,
+                  closeAccountMaturityCredit:closeAccountMaturityCredit
                 }

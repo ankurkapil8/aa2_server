@@ -200,7 +200,7 @@ app.post("/closeAccount", async (req, res, next) => {
           totalMatureAmount += calculateMaturity.maturity(data);
         })
 
-      let response = await RdApplicationModel.closeAccount(1,req.body.account_number,totalMatureAmount);
+      let response = await RdApplicationModel.closeAccountMaturityCredit(1,req.body.account_number,totalMatureAmount);
 
       if(accountDetails[0].phone){
         let payload = {
