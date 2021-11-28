@@ -50,6 +50,15 @@ function save(data) {
       })
     })
   }
+  function closeAccountMaturityCredit(actionType, account_number, maturityAmount){
+    return new Promise(function (resolve, reject) {
+      let qry=connection.query(`UPDATE ${TableName} SET is_account_closed=?, account_close_amount=? WHERE account_number=?`,[actionType, maturityAmount, account_number], async(err, result) => {
+        if (err) reject(err);
+      resolve(`Account number ${account_number} has been closed. Rs. ${maturityAmount} will be debited from this account.`);
+      })
+    })
+  }
+
     function approveAccount(id, actionType,agent_id){
     return new Promise(async function (resolve, reject) {
       let userData = await getAll("id="+id);

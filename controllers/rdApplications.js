@@ -193,7 +193,14 @@ app.post("/closeAccount", async (req, res, next) => {
     }
     try {
       let accountDetails = await RdApplicationModel.getByAccountNumber(`account_number="${req.body.account_number}"`);
-      let response = await RdApplicationModel.closeAccount(1,req.body.account_number);
+      let queryParam = `account_number = "${req.body.account_number}" AND is_deposited=1`
+      let deposites = await AccountDepositedModel.getAll(queryParam);
+      let totalMatureAmount = 0;
+      deposites.map(data => {
+          totalMatureAmount += calculateMaturity.maturity(data);
+        })
+
+      let response = await RdApplicationModel.closeAccount(1,req.body.account_number,totalMatureAmount);
 
       if(accountDetails[0].phone){
         let payload = {
