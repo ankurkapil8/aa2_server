@@ -20,25 +20,25 @@ const connection = require("../config");
     })
   }
   
-  function getSumClosedRdAccount(){
-    return new Promise(function (resolve, reject) {
-        let qry = connection.query(`SELECT 
-        SUM(dp.deposited_amount) as totalMatureAmount,
-        rd.*
-        FROM 
-        account_deposited as dp inner join rd_applications as rd
-        ON(dp.account_number=rd.account_number )
-        where rd.is_account_closed=1 and dp.is_deposited=1
-        group by dp.account_number 
-        `, (err, result) => {
-        console.log(qry.sql);
-          if (err) reject(err);
-        resolve(result);
-      })
-    })
-  }
+  // function getSumClosedRdAccount(){
+  //   return new Promise(function (resolve, reject) {
+  //       let qry = connection.query(`SELECT 
+  //       SUM(dp.deposited_amount) as totalMatureAmount,
+  //       rd.*
+  //       FROM 
+  //       account_deposited as dp inner join rd_applications as rd
+  //       ON(dp.account_number=rd.account_number )
+  //       where rd.is_account_closed=1 and dp.is_deposited=1
+  //       group by dp.account_number 
+  //       `, (err, result) => {
+  //       console.log(qry.sql);
+  //         if (err) reject(err);
+  //       resolve(result);
+  //     })
+  //   })
+  // }
 
-  function getSumDepositedRdAmount(){
+  function getSumRdAmount(){
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`SELECT 
         dp.*,
@@ -46,8 +46,7 @@ const connection = require("../config");
         FROM 
         account_deposited as dp inner join rd_applications as rd
         ON(dp.account_number=rd.account_number )
-        where rd.is_account_closed!=1 and dp.is_deposited=1
-        group by dp.account_number 
+        order by dp.deposited_date
         `, (err, result) => {
         console.log(qry.sql);
           if (err) reject(err);
@@ -81,4 +80,10 @@ const connection = require("../config");
       })
     })
   }
-  module.exports = {getSumProcessingFee:getSumProcessingFee, getSumPaidEmis:getSumPaidEmis, getSumExpense:getSumExpense, getSumDisbursedLoan:getSumDisbursedLoan};
+  module.exports = {
+    getSumProcessingFee:getSumProcessingFee, 
+    getSumPaidEmis:getSumPaidEmis, 
+    getSumExpense:getSumExpense, 
+    getSumDisbursedLoan:getSumDisbursedLoan,
+    getSumRdAmount:getSumRdAmount
+  };
