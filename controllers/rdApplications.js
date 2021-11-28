@@ -184,6 +184,7 @@ app.post("/closeAccount", async (req, res, next) => {
   try {
     const joiSchema = Joi.object({
       account_number: Joi.required(),
+      agent_id: Joi.required()
     }).unknown(true);
     const validationResult = joiSchema.validate(req.body, { abortEarly: false });
     if (validationResult.error) {
@@ -199,7 +200,14 @@ app.post("/closeAccount", async (req, res, next) => {
       deposites.map(data => {
           totalMatureAmount += calculateMaturity.maturity(data);
         })
-
+        let debitPayload = {
+          "account_number" : req.body.account_number,
+          "agent_id":req.body.agent_id,
+          "debited_amount":totalMatureAmount,
+          "deposited_date":moment().format("YYYY-MM-DD"),
+          "is_deposited":0
+        }
+      await AccountDepositedModel.save(debitPayload);
       let response = await RdApplicationModel.closeAccountMaturityCredit(1,req.body.account_number,totalMatureAmount);
 
       if(accountDetails[0].phone){

@@ -60,5 +60,17 @@ app.get("/totalReceivedAmount", async(req, res, next) => {
         });
     } 
   })
-  
+
+  app.get("/rdLadger", async(req, res, next) => {
+    try {
+        let rdDetails = await DashboardModel.getSumRdAmount();
+        return res.status(200).json({
+            message: rdDetails
+        });
+    }catch (error) {
+        return res.status(500).json({
+            message: error.message
+        });
+    } 
+  })
   module.exports = app;
