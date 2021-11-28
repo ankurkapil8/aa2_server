@@ -19,6 +19,43 @@ const connection = require("../config");
       })
     })
   }
+  
+  function getSumClosedRdAccount(){
+    return new Promise(function (resolve, reject) {
+        let qry = connection.query(`SELECT 
+        SUM(dp.deposited_amount) as totalMatureAmount,
+        rd.*
+        FROM 
+        account_deposited as dp inner join rd_applications as rd
+        ON(dp.account_number=rd.account_number )
+        where rd.is_account_closed=1 and dp.is_deposited=1
+        group by dp.account_number 
+        `, (err, result) => {
+        console.log(qry.sql);
+          if (err) reject(err);
+        resolve(result);
+      })
+    })
+  }
+
+  function getSumDepositedRdAmount(){
+    return new Promise(function (resolve, reject) {
+        let qry = connection.query(`SELECT 
+        dp.*,
+        rd.*
+        FROM 
+        account_deposited as dp inner join rd_applications as rd
+        ON(dp.account_number=rd.account_number )
+        where rd.is_account_closed!=1 and dp.is_deposited=1
+        group by dp.account_number 
+        `, (err, result) => {
+        console.log(qry.sql);
+          if (err) reject(err);
+        resolve(result);
+      })
+    })
+  }
+
 
   function getSumExpense(){
     return new Promise(function (resolve, reject) {
