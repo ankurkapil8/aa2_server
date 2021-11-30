@@ -22,7 +22,23 @@ function save(data) {
       resolve(result);
       })
     })
-
+  }
+  function getAllPaid(filter = "1=1"){
+    return new Promise(function (resolve, reject) {
+      connection.query(`
+      SELECT rd.*, 
+      dp.*,
+      rd.id as rd_table_id,
+      dp.id as dp_table_id,
+      (select SUM(deposited_amount) from account_deposited where account_number=rd.account_number AND is_deposited=1)as totalDeposited 
+      from 
+      rd_applications as rd inner join account_deposited as dp 
+      on(rd.account_number=dp.account_number) where ${filter} ORDER BY dp_table_id DESC`, (err, result) => {
+        console.log(filter);
+      if (err) reject(err);
+      resolve(result);
+      })
+    })
   }
   function getByAccountNumber(account_number){
     return new Promise(function (resolve, reject) {
@@ -104,5 +120,6 @@ module.exports = { save:save,
                   approveAccount,approveAccount, 
                   getByAccountNumber:getByAccountNumber,
                   closeAccount:closeAccount,
-                  closeAccountMaturityCredit:closeAccountMaturityCredit
+                  closeAccountMaturityCredit:closeAccountMaturityCredit,
+                  getAllPaid:getAllPaid
                 }
