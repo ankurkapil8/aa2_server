@@ -62,6 +62,24 @@ app.get("/entry/:agent_id", async (req, res, next) => {
     });
   }
 })
+app.get("/entryPaid/:agent_id", async (req, res, next) => {
+  try {
+    let queryParam = "1=1";
+    let formatedRes = [];
+    if (req.params.agent_id != "all") {
+      queryParam = `dp.agent_id = ${req.params.agent_id}`
+    }
+    let response = await RdApplicationModel.getAllPaid(queryParam);
+    return res.status(200).json({
+      message: response
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+})
+
 app.get("/entryByAccountNumber/:account_number", async (req, res, next) => {
   try {
     let queryParam = `account_number="${req.params.account_number}"`;
