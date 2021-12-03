@@ -137,7 +137,7 @@ app.post("/entry", async(req, res, next) => {
               message: validationResult.error.details
             });        
           }
-          let payload = `account_number="${req.params.account_number}"`;
+          let payload = `dp.account_number="${req.params.account_number}"`;
         let response = await AccountDepositedModel.getAll(payload);
         return res.status(200).json({
             message: response
