@@ -23,7 +23,14 @@ function save(data) {
 
   function getAll(filter = "1=1"){
     return new Promise(function (resolve, reject) {
-      let qry =connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY id`, (err, result) => {
+      let qry =connection.query(`SELECT 
+        rd.*, 
+        dp.*,
+        rd.id as rd_table_id,
+        dp.id as dp_table_id
+        from 
+        rd_applications as rd inner join account_deposited as dp 
+        on(rd.account_number=dp.account_number) WHERE ${filter} ORDER BY dp_table_id DESC;`, (err, result) => {
         console.log(qry.sql);
         if (err) reject(err);
       resolve(result);
