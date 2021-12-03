@@ -103,12 +103,12 @@ app.post("/entry", async(req, res, next) => {
     try{
       let queryParam = "1=1";
       if(req.params.agent_id!="all" && req.params.deposited_date!="all"){
-        queryParam=`agent_id = ${req.params.agent_id} && deposited_date = "${req.params.deposited_date}"`
+        queryParam=`dp.agent_id = ${req.params.agent_id} && dp.deposited_date = "${req.params.deposited_date}"`
       }
       else if(req.params.deposited_date!="all"){
-        queryParam=`deposited_date = "${req.params.deposited_date}"`
+        queryParam=`dp.deposited_date = "${req.params.deposited_date}"`
       }else if(req.params.agent_id!="all"){
-        queryParam=`agent_id = ${req.params.agent_id}`
+        queryParam=`dp.agent_id = ${req.params.agent_id}`
       }
       console.log(queryParam);
       let response = await AccountDepositedModel.getAll(queryParam);
