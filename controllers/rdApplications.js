@@ -212,7 +212,7 @@ app.post("/closeAccount", async (req, res, next) => {
     }
     try {
       let accountDetails = await RdApplicationModel.getByAccountNumber(`account_number="${req.body.account_number}"`);
-      let queryParam = `account_number = "${req.body.account_number}" AND is_deposited=1`
+      let queryParam = `dp.account_number = "${req.body.account_number}" AND dp.is_deposited=1`
       let deposites = await AccountDepositedModel.getAll(queryParam);
       let totalMatureAmount = 0;
       deposites.map(data => {
@@ -263,7 +263,7 @@ app.get("/calculateCloseAmount/:account_number", async (req, res, next) => {
         message: validationResult.error.details
       });
     }
-      let queryParam = `account_number = "${req.params.account_number}" AND is_deposited=1`
+      let queryParam = `dp.account_number = "${req.params.account_number}" AND dp.is_deposited=1`
       let response = await AccountDepositedModel.getAll(queryParam);
       let totalMatureAmount = 0;
       response.map(data => {

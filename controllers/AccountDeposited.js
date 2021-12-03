@@ -87,7 +87,7 @@ app.post("/entry", async(req, res, next) => {
     try{
       let queryParam = "1=1";
       if(req.params.agent_id!="all"){
-          queryParam=`agent_id = ${req.params.agent_id}`
+          queryParam=`dp.agent_id = ${req.params.agent_id}`
       }
         let response = await AccountDepositedModel.getAll(queryParam);
         return res.status(200).json({
