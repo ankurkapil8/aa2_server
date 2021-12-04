@@ -48,6 +48,16 @@ function save(data) {
     })
   }
 
+  function updateDeposit(payload){
+    return new Promise(function (resolve, reject) {   
+      let qry=connection.query(`UPDATE ${TableName} SET deposited_amount=${payload.deposited_amount} WHERE id=${payload.id}`, (err, result) => {
+      console.log(qry.sql);
+      if (err) reject(err);
+      resolve("payment has been updated!");
+      })
+    })
+  }
+
   function deleteDeposit(id){
     return new Promise(function (resolve, reject) {
         var query=connection.query(`DELETE from ${TableName} WHERE id = ?`,[id], (err, result) => {
@@ -91,4 +101,12 @@ function save(data) {
       })
     })
   }
-module.exports = { save:save, getAll:getAll, deleteDeposit:deleteDeposit, calculateDepositDate:calculateDepositDate, update:update, getAllGroupBy:getAllGroupBy }
+module.exports = { 
+  save:save, 
+  getAll:getAll, 
+  deleteDeposit:deleteDeposit, 
+  calculateDepositDate:calculateDepositDate, 
+  update:update, 
+  getAllGroupBy:getAllGroupBy,
+  updateDeposit:updateDeposit
+ }

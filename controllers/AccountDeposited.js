@@ -83,6 +83,39 @@ app.post("/entry", async(req, res, next) => {
   
   });
 
+  app.put("/updateDeposit", async(req, res, next) => {
+    try {
+      const joiSchema = Joi.object({
+        id: Joi.required(),
+        deposited_amount: Joi.required(),
+      }).unknown(true);  
+      const validationResult = joiSchema.validate(req.body, { abortEarly: false });
+      if(validationResult.error){
+        return res.status(500).json({
+          message: validationResult.error.details
+        });        
+      }
+      try{
+        let response = await AccountDepositedModel.updateDeposit(req.body);
+        return res.status(200).json({
+            message: response
+          });
+  
+      }catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+  
+    }
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message
+      });
+    }
+  
+  });
+
+
   app.get("/entry/:id", async(req, res, next) => {
     try{
       let queryParam = "1=1";
