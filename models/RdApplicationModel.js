@@ -2,6 +2,8 @@ const { async } = require("q");
 const connection = require("../config");
 const TableName = "rd_applications";
 const moment = require('moment');
+const SmsApi = require("../util/SmsApi");
+
 const AccountDepositedModel = require("./AccountDepositedModel");
 function save(data) {
     return new Promise(function (resolve, reject) {
@@ -84,9 +86,6 @@ function save(data) {
           let accountDetails = userData[0];
           accountDetails.account_number = accountNumber;
           if(actionType==1 && userData[0].rd_amount !=0){
-            //let depositDates = AccountDepositedModel.calculateDepositDate(accountDetails);
-            // depositDates.map(dd=>{
-            //   depositPayload.push(
               let depositPayload={
                       "account_number":accountNumber,
                       "agent_id":agent_id,
@@ -95,16 +94,17 @@ function save(data) {
                       "is_deposited":1,
                       "is_account_open_amount":1
               }
-            //   )
-            // });
-            //if(userData[0].initial_deposited_amount && userData[0].initial_deposited_amount!=0){
-              //if(depositPayload.length){
-                //depositPayload[0][5] = 1;
-                //depositPayload[0][4] = 1;
-              //}
-            //}
             let depositResponse = await AccountDepositedModel.save(depositPayload);
 
+            if(userData[0].phone){
+              let payload = {
+                "messageVar":`${userData[0].account_holder_name}|${accountNumber}|${userData[0].rd_amount}|${moment().format("DD-MM-YYYY").toString()}|${userData[0].rd_amount}`,
+                "phone":userData[0].phone
+              }
+              console.log(payload);
+              SmsApi.sendAccountDeposit(payload);
+            }
+    
           }
         if (err) reject(err);
       resolve(`Account has been ${actionType==1?"approved":"rejected"}!`);
