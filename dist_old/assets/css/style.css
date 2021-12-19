@@ -1,0 +1,203 @@
+.search-form{
+    width: 500px;
+    padding: 0px 60px;
+    margin-left: 290px;
+}
+
+.navbar{
+    box-shadow: none !important;
+}
+.shadow-sm{
+    box-shadow: 0 8px 26px 0 rgba(0,0,0,.08) !important;
+}
+.service{
+    position: relative;
+    bottom: 96px;
+    z-index: 999;
+    background: white;
+}
+.service h5{
+    font-size: 15px;
+    color:  red !important;
+}
+.service img{
+    width: 50px;
+}
+.radius{
+    border-radius: 6px !important;
+}
+.search-service i{
+    position: absolute;
+    left: 185px;
+    top: 17px;
+    color: black;
+}
+.main-search{
+    display: flex;
+    position: relative;
+}
+.view{
+    background-image: url(../img/banner.jpg);
+    background-size: cover;
+    background-position: center center;
+    height: 600px !important;
+}
+.service-box:hover{
+    box-shadow: 0 8px 26px 0 rgba(0,0,0,.08) !important;
+    background: beige;
+}
+/* // Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575px) {
+    .service {
+        position: relative;
+        bottom: 52px;
+        z-index: 999;
+        
+       
+    }
+   
+.main-search{
+    display: flex;
+    height: 48px;
+}
+.main-search .custom-select{
+    height:calc(1.5em + .75rem + 13px);
+}
+.search-form{
+    width: 100%;
+    margin-left: 0px;
+    /* padding: 0px 20px; */
+}
+.search-service i {
+    position: absolute;
+    left: 107px;
+    top: 17px;
+    display: none;
+    color: black;
+}
+.view {
+
+    height: 376px !important;
+}
+
+ }
+
+/* // Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .service .roww{
+        display: flex;
+    }
+    .service {
+       bottom: 13px;
+       
+    }
+
+ }
+
+/* // Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .service {
+     
+       bottom: 50px !important;
+        
+     }
+    .main-search{
+        display: flex;
+        height: 48px;
+    }
+    .main-search .custom-select{
+        height:calc(1.5em + .75rem + 13px);
+    }
+    .search-form {
+        width: 268px;
+        padding: 0px 60px;
+        margin-left: 0px;
+    }
+    .search-service i {
+        position: absolute;
+        left: 40px;
+        top: 69px;
+        display: none;
+        color: black;
+    }
+  
+
+  }
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) { 
+    .search-service i {
+        position: absolute;
+        left: 129px;
+        top: 17px;
+        color: black;
+        display: none;
+    }
+    .service {
+       
+        bottom: 52px !important;
+         
+      }
+ }
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { }
+.main-search .custom-select{
+    height:calc(1.5em + .75rem + 13px);
+}
+
+.text-primary{
+    color: red !important;
+}
+.navbar{
+    font-weight: 400;
+}
+.list-group-item.active{
+    background-color: red !important;
+    border-color: red !important;
+}
+.product-image{
+    height: 50px;
+}
+.uplaodform16{
+    
+min-height: 500px;
+align-items: center;       
+       
+}
+.react-datepicker-wrapper{
+    display: block !important;
+}
+.react-datepicker__input-container input{
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    height:calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.clr-cyan{
+    color: cyan !important;
+}
+.clr-body{
+    background-color: #ecf0f5;
+}
+@media (max-width: 576px) { 
+    .order-popup h4{
+        font-size: 1.0rem;
+    }
+    .order-popup button{
+        padding: .5rem 1.6rem;
+        font-size: .64rem;
+    }
+    .order-popup svg{
+        width: 1em;
+        height: 1em;
+    }
+    .mobile-list{
+        padding: 0.40rem .50rem;
+    }
+ }
