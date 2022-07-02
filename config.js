@@ -5,13 +5,19 @@ const connectionParams={
     useCreateIndex: true,
     useUnifiedTopology: true 
 }
-var connection = mysql.createConnection({
-  host     : 'database-1.cghjxv5prf93.ap-south-1.rds.amazonaws.com',
-  user     : 'admin',
-  password : 'JxtIHMlWKJPDawlnjnqs',
-  database: 'mydb'
-});
+// var connection = mysql.createConnection({
+//   host     : 'database-1.cghjxv5prf93.ap-south-1.rds.amazonaws.com',
+//   user     : 'admin',
+//   password : 'JxtIHMlWKJPDawlnjnqs',
+//   database: 'mydb'
+// });
  
+var connection = mysql.createConnection({
+  host     : 'sg2plzcpnl479109.prod.sin2.secureserver.net',
+  user     : 'aa2_admin',
+  password : 'JxtIHMlWKJPDawlnjnqs',
+  database: 'aa2_dev'
+});
 connection.connect(function(err) {
   if (err) {
     console.error('error connecting: ' + err.stack);
