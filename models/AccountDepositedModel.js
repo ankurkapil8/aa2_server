@@ -1,5 +1,6 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
+
 const TableName = "account_deposited";
 const moment = require("moment");
 // function save(data) {
@@ -12,6 +13,7 @@ const moment = require("moment");
 //     })
 //   }
 function save(data) {
+  connection = Connection.getConnection();
   return new Promise(function (resolve, reject) {
     let qry = connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
       console.log(qry.sql);
@@ -22,6 +24,7 @@ function save(data) {
 }
 
   function getAll(filter = "1=1"){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
       let qry =connection.query(`SELECT 
         rd.*, 
@@ -39,6 +42,7 @@ function save(data) {
 
   }
   function update(payload){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {   
       let qry=connection.query(`UPDATE ${TableName} SET is_deposited=1 WHERE account_number="${payload.account_number}" AND deposited_date="${payload.deposited_date}"`, (err, result) => {
       console.log(qry.sql);
@@ -49,6 +53,7 @@ function save(data) {
   }
 
   function updateDeposit(payload){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {   
       let qry=connection.query(`UPDATE ${TableName} SET deposited_amount=${payload.deposited_amount} WHERE id=${payload.id}`, (err, result) => {
       console.log(qry.sql);
@@ -59,6 +64,7 @@ function save(data) {
   }
 
   function deleteDeposit(id){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         var query=connection.query(`DELETE from ${TableName} WHERE id = ?`,[id], (err, result) => {
         if (err) reject(err);
@@ -93,6 +99,7 @@ function save(data) {
   }
 
   function getAllGroupBy(filter){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
       let qry =connection.query(`SELECT SUM(deposited_amount) as total, agent_id, deposited_date, is_deposited FROM ${TableName} where ${filter} group by agent_id;`, (err, result) => {
         console.log(qry.sql);

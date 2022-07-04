@@ -1,5 +1,5 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
 
   function getSumProcessingFee(){
     return new Promise(function (resolve, reject) {
