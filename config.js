@@ -17,7 +17,7 @@ var connection;
   host     : 'bom1plzcpnl493816.prod.bom1.secureserver.net',
   user     : 'stf2sgxuaulh',
   password : '+@B<-?T.<w85&',
-  database: 'aa2_dev'
+  database: 'aa2_microfinance'
 };
 // var connection = mysql.createConnection({
 //   host     : 'sg2plzcpnl479109.prod.sin2.secureserver.net',
