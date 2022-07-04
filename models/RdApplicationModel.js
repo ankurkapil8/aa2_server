@@ -1,11 +1,14 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
+
 const TableName = "rd_applications";
 const moment = require('moment');
 const SmsApi = require("../util/SmsApi");
 
 const AccountDepositedModel = require("./AccountDepositedModel");
 function save(data) {
+  connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
           console.log(result);
@@ -17,6 +20,8 @@ function save(data) {
   }
 
   function getAll(filter = "1=1"){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         connection.query(`SELECT *, (select SUM(deposited_amount) from account_deposited where account_number=${TableName}.account_number AND is_deposited=1)as totalDeposited from ${TableName}  WHERE ${filter} ORDER BY id DESC`, (err, result) => {
           console.log(filter);
@@ -26,6 +31,8 @@ function save(data) {
     })
   }
   function getAllPaid(filter = "1=1"){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
       connection.query(`
       SELECT rd.*, 
@@ -43,6 +50,8 @@ function save(data) {
     })
   }
   function getByAccountNumber(account_number){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
       connection.query(`SELECT * from ${TableName}  WHERE ${account_number} ORDER BY id DESC`, (err, result) => {
         console.log(account_number);
@@ -53,6 +62,8 @@ function save(data) {
 
   }
   function deleteAccount(id){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         var query=connection.query(`DELETE from ${TableName} WHERE id = ?`,[id], (err, result) => {
         if (err) reject(err);
@@ -61,6 +72,8 @@ function save(data) {
     })
   }
   function closeAccount(actionType,account_number){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
       let qry=connection.query(`UPDATE ${TableName} SET is_account_closed=? WHERE account_number=?`,[actionType, account_number], async(err, result) => {
         if (err) reject(err);
@@ -69,6 +82,8 @@ function save(data) {
     })
   }
   function closeAccountMaturityCredit(actionType, account_number, maturityAmount){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
       let qry=connection.query(`UPDATE ${TableName} SET is_account_closed=?, account_close_amount=? WHERE account_number=?`,[actionType, maturityAmount, account_number], async(err, result) => {
         if (err) reject(err);
@@ -78,6 +93,8 @@ function save(data) {
   }
 
     function approveAccount(id, actionType,agent_id){
+      connection = Connection.getConnection();
+
     return new Promise(async function (resolve, reject) {
       let userData = await getAll("id="+id);
       //let depositPayload = [];
