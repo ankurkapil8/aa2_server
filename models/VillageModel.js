@@ -1,8 +1,10 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
 const TableName = "village";
 
 function save(data) {
+  connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         let query = connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
           console.log(query.sql);
@@ -13,6 +15,8 @@ function save(data) {
     })
   }
   function getAll(filter = "1=1"){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY id DESC`, (err, result) => {
         if (err) reject(err);
@@ -32,6 +36,8 @@ function save(data) {
 
 //   }
 function deleteVillage(id){
+  connection = Connection.getConnection();
+
   return new Promise(function (resolve, reject) {
       var query=connection.query(`DELETE from ${TableName} WHERE id = ?`,[id], (err, result) => {
       console.log(query.sql);

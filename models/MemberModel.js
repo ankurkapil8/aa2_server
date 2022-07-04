@@ -1,8 +1,11 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
+
 const TableName = "member_details";
 
 function save(data) {
+  connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         let query = connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
           console.log(query.sql);
@@ -13,6 +16,8 @@ function save(data) {
     })
   }
   function getAll(filter = "1=1"){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         connection.query(`SELECT * from ${TableName} WHERE ${filter} ORDER BY created_at DESC`, (err, result) => {
         if (err) reject(err);
@@ -32,6 +37,8 @@ function save(data) {
 
 //   }
 function deleteMember(member_id){
+  connection = Connection.getConnection();
+
   return new Promise(function (resolve, reject) {
       var query=connection.query(`DELETE from ${TableName} WHERE member_id = ?`,[member_id], (err, result) => {
       console.log(query.sql);
@@ -42,6 +49,8 @@ function deleteMember(member_id){
 }
 
 function update(record, member_id){
+  connection = Connection.getConnection();
+
   return new Promise(function (resolve, reject) {
     connection.config.queryFormat = function (query, values) {
       if (!values) return query;

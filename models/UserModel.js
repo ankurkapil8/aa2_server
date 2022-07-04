@@ -1,9 +1,11 @@
 const { async } = require("q");
-const connection = require("../config");
+//const connection = require("../config");
+const Connection = require("../util/connectionService");
 const TableName = "user";
 const { decrypt} = require('../util/crypto'); 
 
 function save(data) {
+  connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
         if (err) reject(err);
@@ -13,11 +15,12 @@ function save(data) {
     })
   }
   function findOne(data){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         var qe = connection.query(`SELECT * from ${TableName} WHERE username = ?`,[data.username], (err, result,fields) => {
         if (err) reject(err);
-
-        if(result[0] !=undefined){
+          console.log("result", result);
+        if(result && result[0] !=undefined){
           if(decrypt(result[0].password)!=data.password)
             result = [];
         }

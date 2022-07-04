@@ -1,8 +1,11 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
+
 const TableName = "member_group";
 
 function save(data) {
+  connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
         if (err) reject(err);
@@ -12,6 +15,8 @@ function save(data) {
     })
   }
   function getAll(){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         connection.query(`SELECT member_group.*,
           count(users.member_group_id) AS member_count
@@ -26,6 +31,8 @@ function save(data) {
   }
 
   function deleteGroup(group_code){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         var query=connection.query(`DELETE from ${TableName} WHERE group_code = ?`,[group_code], (err, result) => {
         if (err) reject(err);
@@ -35,6 +42,8 @@ function save(data) {
 
   }
   function getMemberListByGroup(group_code){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
       connection.query(`SELECT * from member_details WHERE member_group_id=? ORDER BY created_at DESC`,[group_code], (err, result) => {
       if (err) reject(err);

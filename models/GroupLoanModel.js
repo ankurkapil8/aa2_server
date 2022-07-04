@@ -1,8 +1,10 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
 const TableName = "loan_applications";
 
 function save(data) {
+  connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
         if (err) reject(err);
@@ -12,6 +14,8 @@ function save(data) {
     })
   }
   function getAll(filter = "1=1"){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         let query=connection.query(`SELECT loan.*,member.*,village.village_name,village.week,village.day from ${TableName} as loan 
         INNER JOIN member_details as member 
@@ -28,6 +32,8 @@ function save(data) {
   }
 
   function approveLoan(id, actionType){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         let qry=connection.query(`UPDATE ${TableName} SET is_approved=? WHERE id=?`,[actionType, id], (err, result) => {
        console.log(qry.sql);
@@ -38,6 +44,8 @@ function save(data) {
   }
 
   function disburseLoan(id, actionType){
+    connection = Connection.getConnection();
+
     return new Promise(function (resolve, reject) {
         let qry=connection.query(`CALL disburseLoan(?, ?);`,[id,actionType], (err, result) => {
        console.log(qry.sql);

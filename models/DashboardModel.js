@@ -1,7 +1,8 @@
 const { async } = require("q");
-const connection = require("../config");
+const Connection = require("../util/connectionService");
 
   function getSumProcessingFee(){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`SELECT * FROM processing_fee ORDER BY id DESC`, (err, result) => {
         console.log(qry.sql);
@@ -11,6 +12,7 @@ const connection = require("../config");
     })
   }
   function getSumPaidEmis(){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`SELECT * FROM EMIs where isPaid=1 ORDER BY id DESC`, (err, result) => {
         console.log(qry.sql);
@@ -39,6 +41,7 @@ const connection = require("../config");
   // }
 
   function getSumRdAmount(){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`SELECT 
         dp.*,
@@ -57,6 +60,7 @@ const connection = require("../config");
 
 
   function getSumExpense(){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`SELECT * FROM expenses ORDER BY id DESC`, (err, result) => {
         console.log(qry.sql);
@@ -67,6 +71,7 @@ const connection = require("../config");
   }
 
   function getSumDisbursedLoan(){
+    connection = Connection.getConnection();
     return new Promise(function (resolve, reject) {
         let qry = connection.query(`SELECT loan.*,member.*,village.village_name,village.week,village.day from loan_applications as loan 
         INNER JOIN member_details as member 
