@@ -6,9 +6,9 @@ const connectionParams={
     useUnifiedTopology: true 
 }
 var connection = mysql.createConnection({
-  host     : 'database-1.cghjxv5prf93.ap-south-1.rds.amazonaws.com',
-  user     : 'admin',
-  password : 'JxtIHMlWKJPDawlnjnqs',
+  host     : 'localhost',
+  user     : 'root',
+  password : '36879ae31b19f55300e670a368e42e8644c30f2cf7c77442',
   database: 'aa2microfinance'
 });
  
