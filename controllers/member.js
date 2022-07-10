@@ -107,7 +107,10 @@ app.get("/entry/:member_id", async(req, res, next) => {
         // for (const key of Object.keys(req.body)) {
         //   updateField = updateField+` "${key}"="${req.body[key]}",`;
         // }
-        // console.log(updateField);        
+        // console.log(updateField);
+        req.body.date_of_birth = moment(req.body.date_of_birth).format('yyyy-MM-DD');
+        req.body.enrollment_date = moment(req.body.enrollment_date).format('yyyy-MM-DD');
+  
         let response = await MemberModel.update(req.body, req.params.member_id);
         return res.status(200).json({
             message: response
