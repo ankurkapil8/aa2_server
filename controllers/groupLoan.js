@@ -30,6 +30,9 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         });        
       }
       req.body.application_date = moment(req.body.application_date).format('yyyy-MM-DD');
+      if(req.body.village_id==""){
+        delete req.body.village_id
+      }
       var formatedData = {
         status:0,
         is_approved:0,
