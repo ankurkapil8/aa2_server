@@ -27,6 +27,9 @@ app.post("/entry", async (req, res, next) => {
       });
     }
     req.body.dob = moment(req.body.dob).format('yyyy-MM-DD');
+    if(req.body.initial_deposited_amount==""){
+      delete req.body.initial_deposited_amount;
+    }
     try {
       let response = await RdApplicationModel.save(req.body);
       return res.status(200).json({

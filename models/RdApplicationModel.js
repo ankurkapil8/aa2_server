@@ -8,7 +8,7 @@ const AccountDepositedModel = require("./AccountDepositedModel");
 function save(data) {
     return new Promise(function (resolve, reject) {
         connection.query(`INSERT INTO ${TableName} SET ?`, data, (err, result) => {
-          console.log("result ",result);
+          console.log("result ",err);
           approveAccount(result.insertId, 1,data.agent_id);
         if (err) reject(err);
         resolve("data saved successfully!");
