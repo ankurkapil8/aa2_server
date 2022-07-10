@@ -43,6 +43,7 @@ app.get("/entry/:member_id", async(req, res, next) => {
       }
       try{
         req.body.date_of_birth = moment(req.body.date_of_birth).format('yyyy-MM-DD');
+        req.body.enrollment_date = moment(req.body.enrollment_date).format('yyyy-MM-DD');
         let response = await MemberModel.save(formatedData);
         return res.status(200).json({
             message: response
