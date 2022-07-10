@@ -26,6 +26,7 @@ app.post("/entry", async(req, res, next) => {
         });        
       }
       try{
+        req.body.deposited_date = moment(req.body.deposited_date).format('yyyy-MM-DD');
         let response = await AccountDepositedModel.save(req.body);
         let accountDetails = await RdApplicationModel.getAll(`account_number="${req.body.account_number}"`);
         if(accountDetails[0].phone){

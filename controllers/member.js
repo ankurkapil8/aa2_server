@@ -30,7 +30,7 @@ app.get("/entry/:member_id", async(req, res, next) => {
       const joiSchema = Joi.object({
         enrollment_date: Joi.required(),
         member_name:Joi.required(),
-      }).unknown(true);  
+      }).unknown(true);
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
         return res.status(500).json({
@@ -42,6 +42,7 @@ app.get("/entry/:member_id", async(req, res, next) => {
         ...req.body
       }
       try{
+        req.body.date_of_birth = moment(req.body.date_of_birth).format('yyyy-MM-DD');
         let response = await MemberModel.save(formatedData);
         return res.status(200).json({
             message: response

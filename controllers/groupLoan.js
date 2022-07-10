@@ -29,6 +29,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
           message: validationResult.error.details
         });        
       }
+      req.body.application_date = moment(req.body.application_date).format('yyyy-MM-DD');
       var formatedData = {
         status:0,
         is_approved:0,

@@ -26,7 +26,7 @@ app.post("/entry", async (req, res, next) => {
         message: validationResult.error.details
       });
     }
-
+    req.body.dob = moment(req.body.dob).format('yyyy-MM-DD');
     try {
       let response = await RdApplicationModel.save(req.body);
       return res.status(200).json({

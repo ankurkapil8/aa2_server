@@ -20,6 +20,7 @@ app.post("/entry", async(req, res, next) => {
       }
       //const groupCode = `${req.body.group_name}_${new Date().getTime()}`;
       const created_at = new Date().getTime();
+      req.body.date_of_processing = moment(req.body.date_of_processing).format('yyyy-MM-DD');
       var formatedData = {
         // created_at:created_at,
         status:0,
