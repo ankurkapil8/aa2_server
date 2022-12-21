@@ -4,6 +4,7 @@ const appE = express();
 const Joi = require('@hapi/joi');
 var ProcessingFeeModel = require('../models/ProcessingFeeModel');
 const { async } = require("q");
+var moment = require('moment');
 
 app.post("/entry", async(req, res, next) => {
     try {
@@ -11,7 +12,8 @@ app.post("/entry", async(req, res, next) => {
         amount: Joi.required(),
         date_of_processing: Joi.required(),
 
-      }).unknown(true);  
+      }).unknown(true);
+      req.body["date_of_processing"] = moment(req.body["date_of_processing"]).format("YYYY-MM-DD");
       const validationResult = joiSchema.validate(req.body, { abortEarly: false });
       if(validationResult.error){
         return res.status(500).json({
