@@ -35,6 +35,7 @@ app.post("/applyGroupLoan", async(req, res, next) => {
         is_disbursed:0,
         ...req.body
       }
+      formatedData["application_date"] = moment(req.body.application_date).format("YYYY-MM-DD")
       try{
         let response = await GroupLoanModel.save(formatedData);
         return res.status(200).json({
