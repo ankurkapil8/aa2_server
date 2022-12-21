@@ -14,10 +14,10 @@ const connectionParams={
 // });
 var connection;
  const db_config = {
-  host     : 'bom1plzcpnl493816.prod.bom1.secureserver.net',
-  user     : 'stf2sgxuaulh',
-  password : '+@B<-?T.<w85&',
-  database: 'aa2_dev'
+  host     : 'localhost',
+  user     : 'root',
+  password : '36879ae31b19f55300e670a368e42e8644c30f2cf7c77442',
+  database: 'aa2_copy'
 };
 // var connection = mysql.createConnection({
 //   host     : 'sg2plzcpnl479109.prod.sin2.secureserver.net',
