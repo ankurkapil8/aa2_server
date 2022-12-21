@@ -4,6 +4,7 @@ const appE = express();
 const Joi = require('@hapi/joi');
 var ExpenseModel = require('../models/ExpenseModel');
 const { async } = require("q");
+var moment = require('moment');
 
 app.post("/entry", async(req, res, next) => {
     try {
